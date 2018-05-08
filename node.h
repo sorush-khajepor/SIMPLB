@@ -17,17 +17,21 @@ public:
 
 	Node() {set( (double) 0.); }
 
-	double& operator[] (const int& q){
-		return f[q];	
-	}
+    // Altering access
+	double& operator[] (const int& q){return f[q];}
 
+	// Constant access
+	double const& operator[] (const int& q) const {return f[q];}
+
+	// Set all distros to a number
     Node& operator= (const double& rhs){
 
-		for (int iQ=0;iQ<lattice::nQ;iQ++){
-			f[iQ] = rhs;
-		}
+		//for (int iQ=0;iQ<lattice::nQ;iQ++){
+		//	f[iQ] = rhs;
+    	set(rhs);
     }
 
+    // Set node with another node
     Node& operator= (const Node& rhs){
 
 		for (int iQ=0;iQ<lattice::nQ;iQ++){
@@ -43,18 +47,13 @@ public:
     }
 
 	void mirror () {
-		double f_tmp;
-		int q;
-		for (vector<int>::const_iterator it=halfQs.begin();it!=halfQs.end();++it){
-			q = *it;
-			std::swap(f[q],f[opposite[q]]);
+		int iQ;
+		for (int i=0;i<nQ/2;++i){
+			iQ = iHalfQs[i];
+			std::swap(f[iQ],f[iOpposite[iQ]]);
 		}
 	}
 
-  //  void revStream() {
-
-
-   // }
 
 	void print () {
 		for (int iQ=0;iQ<lattice::nQ;iQ++){

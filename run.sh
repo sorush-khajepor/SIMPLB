@@ -1,4 +1,5 @@
 rm *.gch
-g++ -std=c++11 main.cpp domain.h lattice.h node.h stream.h
+rm a.out
+g++ -std=c++11 main.cpp domain.h lattice.h node.h
 ./a.out
 
