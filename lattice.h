@@ -1,5 +1,5 @@
-#ifndef LATTICE_HH
-#define LATTICE_HH
+#ifndef LATTICE_H
+#define LATTICE_H
 // Choosing the lattice
 #define lattice D2Q9
 
