@@ -17,7 +17,7 @@ public:
         *this= (double) 0.;
     }
 
-    // Altering access
+    // Read-Write access
     double& operator[] (const int& q){return f[q];}
 
     // Constant access
