@@ -7,7 +7,7 @@ protected:
 
     Node *nodes;
 
-    int neighbor[lattice::nQ];
+    int MPIneighbor[lattice::nQ];
 
 public:
 
@@ -34,7 +34,7 @@ public:
     int getNY() const {return nY;}
     int getSize() const {return size;}
 
-    int& getNeighbor (const int& iNeighbor){return neighbor[iNeighbor];}
+    int& getMPIneighbor (const int& iNeighbor){return MPIneighbor[iNeighbor];}
 
     void print() {
         cout<< "nX = " << nX<<endl;
