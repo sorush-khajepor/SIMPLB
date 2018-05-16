@@ -7,6 +7,8 @@ protected:
 
     Node *nodes;
 
+    int neighbor[lattice::nQ];
+
 public:
 
     Brick(int nX_, int nY_):nX(nX_),nY(nY_),size(nX*nY){
@@ -31,6 +33,8 @@ public:
     int getNX() const {return nX;}
     int getNY() const {return nY;}
     int getSize() const {return size;}
+
+    int& getNeighbor (const int& iNeighbor){return neighbor[iNeighbor];}
 
     void print() {
         cout<< "nX = " << nX<<endl;
