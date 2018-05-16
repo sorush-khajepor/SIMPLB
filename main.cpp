@@ -1,7 +1,7 @@
 #include <iostream>
 #include "brick.h"
 #include "math.h"
-#include "mpi.h"
+#include "mpiTools.h"
 
 
 using namespace std;
@@ -24,25 +24,20 @@ void getPeriodicNeighbor (const int& iX, const int& iY, const int& iQ,const int&
 
 int main(){
 
-MPI_Init(NULL,NULL);
-int rank;
-int size;
 
-MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-MPI_Comm_size(MPI_COMM_WORLD, &size); 
 
 int nDomainNodeX=10;
 int nDomainNodeY=10;
 int nMortarLayer = 2;
 int nDomainNode = nDomainNodeX*nDomainNodeY;
-int nBrickNodeX = sqrt(nDomainNode/size)+nMortarLayer;
+int nBrickNodeX = sqrt(nDomainNode/mpiTools.getSize())+nMortarLayer;
 int nBrickNodeY = nBrickNodeX;
 int nBrickX = nDomainNodeX/(nBrickNodeX-nMortarLayer);
 int nBrickY = nDomainNodeY/(nBrickNodeY-nMortarLayer);
 Brick brick(nBrickNodeX,nBrickNodeY);
 
 // filling a node on top of brick0 with 1.0
-if (rank==0){
+if (mpiTools.getRank()==0){
     for (int iQ=0;iQ<lattice::nQ;++iQ){
         brick(5,5)[5] = 5.0;//(double) iQ+0.00001;
     }
@@ -54,11 +49,11 @@ if (rank==0){
 
 // setting brick neighbors
 int iX,iY,iXnei,iYnei;
-getLongIndex(rank,nBrickY,iX,iY);
+getLongIndex(mpiTools.getRank(),nBrickY,iX,iY);
 for (int iQ=0;iQ<lattice::nQ;++iQ){
 	getPeriodicNeighbor(iX,iY,iQ,nBrickX,nBrickY,iXnei,iYnei);
 	brick.getMPIneighbor(iQ)= getShortIndex(iXnei,iYnei,nBrickY);
-//	cout<<rank<<" iX="<<iX<<" iY="<<iY<<" iQ= "<<iQ
+//	cout<<mpiTools.getRank()<<" iX="<<iX<<" iY="<<iY<<" iQ= "<<iQ
 //	 <<" nei_rank="<<brick.getMPIneighbor(iQ)<<" iXnei="<<iXnei<<" iYnei="<<iYnei<<endl;
 }
 
@@ -91,7 +86,7 @@ for (int iQ=0;iQ<lattice::nQ;++iQ){
         brickLimit[iQ].iYend=BBegin+1;
     }
 
-    if (rank==0){
+    if (mpiTools.getRank()==0){
 
     //	cout<<brickLimit[iQ].iXbegin<<"  "<<brickLimit[iQ].iXend<<"  "<<brickLimit[iQ].iYbegin<<"  "<<brickLimit[iQ].iYend<<endl;
 
@@ -126,7 +121,7 @@ for (int iQ=0;iQ<lattice::nQ;++iQ){
         mortarLimit[iQ].iYend=BBegin+1;
     }
 
-    if (rank==0){
+    if (mpiTools.getRank()==0){
 
     //	cout<<mortarLimit[iQ].iXbegin<<"  "<<mortarLimit[iQ].iXend<<"  "<<mortarLimit[iQ].iYbegin<<"  "<<mortarLimit[iQ].iYend<<endl;
 
@@ -196,7 +191,7 @@ for (int iQ=1;iQ<lattice::nQ;++iQ){
 MPI_Request reqs,reqr;
 MPI_Status status;
 //for (int iQ=1;iQ<lattice::nQ;++iQ)
-if (rank==0)
+if (mpiTools.getRank()==0)
 {
     int iQ = 2;
     int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
@@ -204,14 +199,14 @@ if (rank==0)
     for(int ib=0;ib<length;++ib)
     {
         for (int i=0;i<lattice::nQ;++i)
-        cout<<"rank="<<rank<<"  node ID="<<ib<<"  dir="<<i<<"  f= "<<boundarySendBuffer[iQ][ib].getF(i)<<endl;
+        cout<<"Rank()="<<mpiTools.getRank()<<"  node ID="<<ib<<"  dir="<<i<<"  f= "<<boundarySendBuffer[iQ][ib].getF(i)<<endl;
     }
     cout<<"-----------------------"<<endl;
 // printing finished
     MPI_Isend(&boundarySendBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,brick.getMPIneighbor(iQ), iQ, MPI_COMM_WORLD,&reqs);
 }
 //for (int iQ=1;iQ<lattice::nQ;++iQ)
-if(rank==1)
+if(mpiTools.getRank()==1)
 {
     int iQ = 4;
     int iOp = lattice::iOpposite[iQ];
@@ -222,7 +217,7 @@ if(rank==1)
     for(int ib=0;ib<length;++ib)
     {
         for (int i=0;i<lattice::nQ;++i)
-        cout<<" Afterrank="<<rank<<"  node ID="<<ib<<"  dir="<<i<<"  f= "<<boundaryRecvBuffer[iQ][ib].getF(i)<<endl;
+        cout<<" AfterRank"<<mpiTools.getRank()<<"  node ID="<<ib<<"  dir="<<i<<"  f= "<<boundaryRecvBuffer[iQ][ib].getF(i)<<endl;
     }
     cout<<"-----------------------"<<endl;
 // printing finished
@@ -283,7 +278,7 @@ for (int iX=0;iX<brick.getNX();++iX){
         {
             double f = brick(iX,iY)[iQ];
             if (f>0.){
-                cout<<" t="<<t<<" rank="<<rank<<"  node iX="<<iX<<" node iY="<<iY<<"  dir="<<iQ<<"  f= "<<f<<endl;
+                cout<<" t="<<t<<" Rank="<<mpiTools.getRank()<<"  node iX="<<iX<<" node iY="<<iY<<"  dir="<<iQ<<"  f= "<<f<<endl;
             }
         }
     }
@@ -300,7 +295,7 @@ for (int iQ=1;iQ<lattice::nQ;++iQ)
         {
             double f = boundaryRecvBuffer[iQ][ib].getF(i);
             if (f>0.){
-              //  cout<<" rank="<<rank<<"  BC dir="<<iQ<<"  node ID="<<ib<<"  dir="<<i<<"  f= "<<f<<endl;
+              //  cout<<" rank="<<mpiTools.getRank()<<"  BC dir="<<iQ<<"  node ID="<<ib<<"  dir="<<i<<"  f= "<<f<<endl;
             }
         }
     }
