@@ -11,4 +11,6 @@ public:
     int& getBegin(const int& i) {return begin[i];}
     int& getEnd  (const int& i){return end[i];}
     int getLength(const int& i){return end[i]-begin[i];}
+    // Volume in 2D is surface area of the box
+    int getVolume(){return getLength(0)*getLength(1);}
 };
