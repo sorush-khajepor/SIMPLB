@@ -1,6 +1,6 @@
 #include"node.h"
 
-class Domain {
+class Brick {
 
 protected:
     int nX, nY, size;
@@ -9,7 +9,7 @@ protected:
 
 public:
 
-    Domain(int nX_, int nY_):nX(nX_),nY(nY_),size(nX*nY){
+    Brick(int nX_, int nY_):nX(nX_),nY(nY_),size(nX*nY){
 		
         nodes = new Node[nX_*nY_];
 		
@@ -39,8 +39,8 @@ public:
     }
 	
     void getPeriodicNeighbor (const int& iX, const int& iY, const int& iQ, int& iX_neighbor, int& iY_neighbor) {
-        iX_neighbor = (iX + Qvectors[iQ][0]+nX)%nX;
-        iY_neighbor = (iY + Qvectors[iQ][1]+nY)%nY;
+        iX_neighbor = (iX + lattice::Qvector[iQ][0]+nX)%nX;
+        iY_neighbor = (iY + lattice::Qvector[iQ][1]+nY)%nY;
     }
 
 
@@ -52,12 +52,12 @@ public:
         for (int iX=0;iX<nX;++iX){
             for (int iY=0;iY<nY;++iY){
                 id = getIndex(iX,iY);
-                for (int i=0;i<nQ/2;++i){
+                for (int i=0;i<lattice::nQ/2;++i){
 
-                    iQ = iHalfQs[i];
+                    iQ = lattice::iHalfQs[i];
                     getPeriodicNeighbor(iX,iY,iQ,iX_neighbor,iY_neighbor);
                     id_neighbor = getIndex(iX_neighbor,iY_neighbor); 
-                    std::swap(nodes[id][iQ],nodes[id_neighbor][iOpposite[iQ]]);
+                    std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
                 }
             }
         }
@@ -74,7 +74,7 @@ public:
         mirror();
     }
 
-    Domain& operator= (const double& rhs){
+    Brick& operator= (const double& rhs){
 
         for (int iNode=0;iNode<size;++iNode){
             nodes[iNode]= rhs;
