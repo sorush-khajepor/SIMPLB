@@ -6,7 +6,16 @@ class Box{
     int begin[1];
     int end[1];
 public:
+    Box(){
+       begin[0]=0;
+       begin[1]=0;
+       end[0] = 0;
+       end[1] = 0;
+    }
     Box(const int& iXbegin,const int& iYbegin,const int& iXend,const int& iYend){
+      set(iXbegin,iYbegin,iXend,iYend);
+    }
+    void set (const int& iXbegin,const int& iYbegin,const int& iXend,const int& iYend){
        begin[0]=iXbegin;
        begin[1]=iYend;
        end[0] = iXend;

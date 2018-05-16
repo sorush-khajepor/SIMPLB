@@ -1,5 +1,5 @@
 #include <iostream>
-#include "brick.h"
+#include "block.h"
 #include "math.h"
 #include "mpiTools.h"
 
@@ -30,73 +30,73 @@ int nDomainNodeX=10;
 int nDomainNodeY=10;
 int nMortarLayer = 2;
 int nDomainNode = nDomainNodeX*nDomainNodeY;
-int nBrickNodeX = sqrt(nDomainNode/mpiTools.getSize())+nMortarLayer;
-int nBrickNodeY = nBrickNodeX;
-int nBrickX = nDomainNodeX/(nBrickNodeX-nMortarLayer);
-int nBrickY = nDomainNodeY/(nBrickNodeY-nMortarLayer);
-Brick brick(nBrickNodeX,nBrickNodeY);
+int nBlockNodeX = sqrt(nDomainNode/mpiTools.getSize())+nMortarLayer;
+int nBlockNodeY = nBlockNodeX;
+int nBlockX = nDomainNodeX/(nBlockNodeX-nMortarLayer);
+int nBlockY = nDomainNodeY/(nBlockNodeY-nMortarLayer);
+Block block(nBlockNodeX,nBlockNodeY);
 
-// filling a node on top of brick0 with 1.0
+// filling a node on top of block0 with 1.0
 if (mpiTools.getRank()==0){
     for (int iQ=0;iQ<lattice::nQ;++iQ){
-        brick(5,5)[5] = 5.0;//(double) iQ+0.00001;
+        block(5,5)[5] = 5.0;//(double) iQ+0.00001;
     }
 }
-// rank is the address of each brick
+// rank is the address of each block
 
-//cout<<"nBrickX,Y "<<nBrickX<<" "<<nBrickY<<endl;
-//cout<<"nBrickNodeX,Y "<<nBrickNodeX<<" "<<nBrickNodeY<<endl;
+//cout<<"nBlockX,Y "<<nBlockX<<" "<<nBlockY<<endl;
+//cout<<"nBlockNodeX,Y "<<nBlockNodeX<<" "<<nBlockNodeY<<endl;
 
-// setting brick neighbors
+// setting block neighbors
 int iX,iY,iXnei,iYnei;
-getLongIndex(mpiTools.getRank(),nBrickY,iX,iY);
+getLongIndex(mpiTools.getRank(),nBlockY,iX,iY);
 for (int iQ=0;iQ<lattice::nQ;++iQ){
-	getPeriodicNeighbor(iX,iY,iQ,nBrickX,nBrickY,iXnei,iYnei);
-	brick.getMPIneighbor(iQ)= getShortIndex(iXnei,iYnei,nBrickY);
+	getPeriodicNeighbor(iX,iY,iQ,nBlockX,nBlockY,iXnei,iYnei);
+	block.getMPIneighbor(iQ)= getShortIndex(iXnei,iYnei,nBlockY);
 //	cout<<mpiTools.getRank()<<" iX="<<iX<<" iY="<<iY<<" iQ= "<<iQ
-//	 <<" nei_rank="<<brick.getMPIneighbor(iQ)<<" iXnei="<<iXnei<<" iYnei="<<iYnei<<endl;
+//	 <<" nei_rank="<<block.getMPIneighbor(iQ)<<" iXnei="<<iXnei<<" iYnei="<<iYnei<<endl;
 }
 
 // setting border limits(not mortar layer) for D2Q9 - check for loop limits of 0 if it runs!
-BoxLimit brickLimit[lattice::nQ];
+BoxLimit blockLimit[lattice::nQ];
 {
-int NNX=brick.getNX()-1;
-int NNY=brick.getNY()-1;
+int NNX=block.getNX()-1;
+int NNY=block.getNY()-1;
 int BBegin = 1;
 for (int iQ=0;iQ<lattice::nQ;++iQ){
     if (lattice::Qvector[iQ][0]==1){
-        brickLimit[iQ].iXbegin = NNX-1;
-        brickLimit[iQ].iXend = NNX;
+        blockLimit[iQ].iXbegin = NNX-1;
+        blockLimit[iQ].iXend = NNX;
     }else if(lattice::Qvector[iQ][0]==0){
-        brickLimit[iQ].iXbegin=BBegin;
-        brickLimit[iQ].iXend=NNX;
+        blockLimit[iQ].iXbegin=BBegin;
+        blockLimit[iQ].iXend=NNX;
     }else if(lattice::Qvector[iQ][0]==-1){
-        brickLimit[iQ].iXbegin=BBegin;
-        brickLimit[iQ].iXend=BBegin+1;
+        blockLimit[iQ].iXbegin=BBegin;
+        blockLimit[iQ].iXend=BBegin+1;
     }
 
     if (lattice::Qvector[iQ][1]==1){
-        brickLimit[iQ].iYbegin = NNY-1;
-        brickLimit[iQ].iYend = NNY;
+        blockLimit[iQ].iYbegin = NNY-1;
+        blockLimit[iQ].iYend = NNY;
     }else if(lattice::Qvector[iQ][1]==0){
-        brickLimit[iQ].iYbegin=BBegin;
-        brickLimit[iQ].iYend=NNY;
+        blockLimit[iQ].iYbegin=BBegin;
+        blockLimit[iQ].iYend=NNY;
     }else if(lattice::Qvector[iQ][1]==-1){
-        brickLimit[iQ].iYbegin=BBegin;
-        brickLimit[iQ].iYend=BBegin+1;
+        blockLimit[iQ].iYbegin=BBegin;
+        blockLimit[iQ].iYend=BBegin+1;
     }
 
     if (mpiTools.getRank()==0){
 
-    //	cout<<brickLimit[iQ].iXbegin<<"  "<<brickLimit[iQ].iXend<<"  "<<brickLimit[iQ].iYbegin<<"  "<<brickLimit[iQ].iYend<<endl;
+    //	cout<<blockLimit[iQ].iXbegin<<"  "<<blockLimit[iQ].iXend<<"  "<<blockLimit[iQ].iYbegin<<"  "<<blockLimit[iQ].iYend<<endl;
 
     }
 }
 }
 // setting Mortar Layer limits for D2Q9 - check for loop limits of 0 if it runs!
 BoxLimit mortarLimit[lattice::nQ];
-int NNX=brick.getNX();
-int NNY=brick.getNY();
+int NNX=block.getNX();
+int NNY=block.getNY();
 int BBegin = 0;
 for (int iQ=0;iQ<lattice::nQ;++iQ){
     if (lattice::Qvector[iQ][0]==1){
@@ -138,9 +138,9 @@ int blocklength = 1;
 int stride;
 
 int iQ = 1;
-int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
+int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
 if (iQ==2 or iQ==4){
-    stride = brick.getNY();
+    stride = block.getNY();
 } else {
     stride = 1;
 }
@@ -171,7 +171,7 @@ std::vector<Distro> boundaryRecvBuffer[lattice::nQ];
 
 // boundaries start from iQ = 1. Because borderlimit[iQ=0] gives whole domain.
 for (int iQ=1;iQ<lattice::nQ;++iQ){
-    int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
+    int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
     for (int iBuffer=0;iBuffer<length;++iBuffer){
         Distro distro;
         boundarySendBuffer[iQ].push_back(distro);
@@ -179,9 +179,9 @@ for (int iQ=1;iQ<lattice::nQ;++iQ){
     }
 }
 
-//    for (int iX=brickLimit[iBoundary].iXbegin;iX<brickLimit[iBoundary].iXend;++iX){
-//        for (int iY=brickLimit[iBoundary].iYbegin;iY<brickLimit[iBoundary].iYend;++iY){
-//    int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
+//    for (int iX=blockLimit[iBoundary].iXbegin;iX<blockLimit[iBoundary].iXend;++iX){
+//        for (int iY=blockLimit[iBoundary].iYbegin;iY<blockLimit[iBoundary].iYend;++iY){
+//    int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
 //    for (int iBuffer=0;iBuffer<length;++iBuffer){
 
 
@@ -194,7 +194,7 @@ MPI_Status status;
 if (mpiTools.getRank()==0)
 {
     int iQ = 2;
-    int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
+    int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
 // printing
     for(int ib=0;ib<length;++ib)
     {
@@ -203,15 +203,15 @@ if (mpiTools.getRank()==0)
     }
     cout<<"-----------------------"<<endl;
 // printing finished
-    MPI_Isend(&boundarySendBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,brick.getMPIneighbor(iQ), iQ, MPI_COMM_WORLD,&reqs);
+    MPI_Isend(&boundarySendBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,block.getMPIneighbor(iQ), iQ, MPI_COMM_WORLD,&reqs);
 }
 //for (int iQ=1;iQ<lattice::nQ;++iQ)
 if(mpiTools.getRank()==1)
 {
     int iQ = 4;
     int iOp = lattice::iOpposite[iQ];
-    int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
-    MPI_Recv(&boundaryRecvBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,brick.getMPIneighbor(iOp), iOp, MPI_COMM_WORLD,&status);
+    int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
+    MPI_Recv(&boundaryRecvBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,block.getMPIneighbor(iOp), iOp, MPI_COMM_WORLD,&status);
 
 // printing
     for(int ib=0;ib<length;++ib)
@@ -229,10 +229,10 @@ for (int t=0;t<10;++t){
 // Copy domain boundaries to send buffer
 for (int iQ=1;iQ<lattice::nQ;++iQ){
     int iBuffer =0;
-    for (int iX=brickLimit[iQ].iXbegin;iX<brickLimit[iQ].iXend;++iX){
-        for (int iY=brickLimit[iQ].iYbegin;iY<brickLimit[iQ].iYend;++iY){
+    for (int iX=blockLimit[iQ].iXbegin;iX<blockLimit[iQ].iXend;++iX){
+        for (int iY=blockLimit[iQ].iYbegin;iY<blockLimit[iQ].iYend;++iY){
 
-            boundarySendBuffer[iQ][iBuffer] = brick(iX,iY);
+            boundarySendBuffer[iQ][iBuffer] = block(iX,iY);
             iBuffer++;
         }
     }
@@ -243,14 +243,14 @@ MPI_Request reqs,reqr;
 MPI_Status status;
 for (int iQ=1;iQ<lattice::nQ;++iQ)
 {
-    int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
-    MPI_Isend(&boundarySendBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,brick.getMPIneighbor(iQ), iQ, MPI_COMM_WORLD,&reqs);
+    int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
+    MPI_Isend(&boundarySendBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,block.getMPIneighbor(iQ), iQ, MPI_COMM_WORLD,&reqs);
 }
 for (int iQ=1;iQ<lattice::nQ;++iQ)
 {
     int iOp = lattice::iOpposite[iQ];
-    int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
-    MPI_Recv(&boundaryRecvBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,brick.getMPIneighbor(iQ), iOp, MPI_COMM_WORLD,&status);
+    int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
+    MPI_Recv(&boundaryRecvBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,block.getMPIneighbor(iQ), iOp, MPI_COMM_WORLD,&status);
 }
 
 // Copying receive buffer into Domain mortar nodes
@@ -260,7 +260,7 @@ for (int iQ=1;iQ<lattice::nQ;++iQ){
         for (int iY=mortarLimit[iQ].iYbegin;iY<mortarLimit[iQ].iYend;++iY){
             // TODO :: overload this loop
             for (int iQQ=0;iQQ<lattice::nQ;++iQQ){
-                brick(iX,iY)[iQQ] = boundaryRecvBuffer[iQ][iBuffer].getF(iQQ);
+                block(iX,iY)[iQQ] = boundaryRecvBuffer[iQ][iBuffer].getF(iQQ);
             }
 
             iBuffer++;
@@ -268,15 +268,15 @@ for (int iQ=1;iQ<lattice::nQ;++iQ){
     }
 }
 
-brick.stream();
-//brick.revStream(1,brick.getNX(),1,brick.getNY());
+block.stream();
+//block.revStream(1,block.getNX(),1,block.getNY());
 MPI_Barrier(MPI_COMM_WORLD);
 // Printing
-for (int iX=0;iX<brick.getNX();++iX){
-    for (int iY=0;iY<brick.getNY();++iY){
+for (int iX=0;iX<block.getNX();++iX){
+    for (int iY=0;iY<block.getNY();++iY){
         for (int iQ=0;iQ<lattice::nQ;++iQ)
         {
-            double f = brick(iX,iY)[iQ];
+            double f = block(iX,iY)[iQ];
             if (f>0.){
                 cout<<" t="<<t<<" Rank="<<mpiTools.getRank()<<"  node iX="<<iX<<" node iY="<<iY<<"  dir="<<iQ<<"  f= "<<f<<endl;
             }
@@ -288,7 +288,7 @@ for (int iX=0;iX<brick.getNX();++iX){
 // printing
 for (int iQ=1;iQ<lattice::nQ;++iQ)
 {
-    int length = (brickLimit[iQ].iYend - brickLimit[iQ].iYbegin)*(brickLimit[iQ].iXend - brickLimit[iQ].iXbegin);
+    int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
     for(int ib=0;ib<length;++ib)
     {
         for (int i=0;i<lattice::nQ;++i)
