@@ -1,3 +1,7 @@
+#include <iostream>
+using namespace std;
+
+
 class Box{
     int begin[1];
     int end[1];
@@ -13,4 +17,8 @@ public:
     int getLength(const int& i){return end[i]-begin[i];}
     // Volume in 2D is surface area of the box
     int getVolume(){return getLength(0)*getLength(1);}
+    void print(){
+        cout<<"Begin vector iX="<<begin[0]<<" iY="<<begin[1];
+        cout<<"End   vector iX="<<  end[0]<<" iY="<<end[1];
+    }
 };
