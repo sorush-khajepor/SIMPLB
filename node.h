@@ -3,7 +3,7 @@
 #include <vector>
 
 using namespace std;
-//Class
+
 class Node {
 
 protected:	
@@ -20,7 +20,7 @@ public:
     // Read-Write access
     double& operator[] (const int& q){return f[q];}
 
-    // Constant access
+    // Read-Only access
     double const& operator[] (const int& q) const {return f[q];}
 
     // Set all distros to a number

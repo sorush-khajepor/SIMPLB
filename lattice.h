@@ -9,7 +9,7 @@
 
 namespace D2Q9 {
 
-// number of streaming vectors (Q-vectors)
+// Number of streaming vectors (Q-vectors)
 const int nQ = 9;
 
 // Lattice dimensions

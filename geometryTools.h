@@ -17,7 +17,7 @@ public:
     }
     void set (const int& iXbegin,const int& iYbegin,const int& iXend,const int& iYend){
        begin[0]=iXbegin;
-       begin[1]=iYend;
+       begin[1]=iYbegin;
        end[0] = iXend;
        end[1] = iYend;
     }
