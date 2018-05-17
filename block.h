@@ -8,6 +8,8 @@ protected:
 
     Node *nodes;
 
+    // This stores neighbor blocks (or MPI processes) in the directions of Qvector in the MPI world.
+    // Note, each Block is assigned to an MPI process.
     int MPIneighbor[lattice::nQ];
 
     Box boundaryLimit[lattice::nQ];
@@ -19,6 +21,8 @@ public:
     Block(int nX_, int nY_):nX(nX_),nY(nY_),size(nX*nY){
 		
         nodes = new Node[nX_*nY_];
+        setBoundaryLimit();
+        setGhostLimit();
 		
     }
 
@@ -39,30 +43,35 @@ public:
     int getNY() const {return nY;}
     int getSize() const {return size;}
 
-    int& getMPIneighbor (const int& iNeighbor){return MPIneighbor[iNeighbor];}
+    // Gives the neighbor block (or MPI process) in the direction of iQ.
+    int& getMPIneighbor (const int& iQ){return MPIneighbor[iQ];}
 
+    // Prints class members
     void print() {
         cout<< "nX = " << nX<<endl;
         cout<< "nY = " << nY<<endl;
         cout<< "size  = " << size<<endl;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
-        cout<<"boundaryLimit iXbegin="<<boundaryLimit[iQ].getBegin(0)<<" iXend="<<boundaryLimit[iQ].getEnd(0)
-            <<"  iYbegin="<<boundaryLimit[iQ].getBegin(1)<<" iYend="<<boundaryLimit[iQ].getEnd(1)<<endl;
+            cout<<"iQ="<<iQ<<"boundaryLimit iXbegin="<<boundaryLimit[iQ].getBegin(0)<<" iXend="<<boundaryLimit[iQ].getEnd(0)
+                <<"  iYbegin="<<boundaryLimit[iQ].getBegin(1)<<" iYend="<<boundaryLimit[iQ].getEnd(1)<<endl;
         }
-
         for (int iQ=0;iQ<lattice::nQ;++iQ){
-        cout<<"ghostLimit iXbegin="<<ghostLimit[iQ].getBegin(0)<<" iXend="<<ghostLimit[iQ].getEnd(0)
-            <<"  iYbegin="<<ghostLimit[iQ].getBegin(1)<<" iYend="<<ghostLimit[iQ].getEnd(1)<<endl;
+            cout<<"iQ="<<iQ<<"ghostLimit iXbegin="<<ghostLimit[iQ].getBegin(0)<<" iXend="<<ghostLimit[iQ].getEnd(0)
+                <<"  iYbegin="<<ghostLimit[iQ].getBegin(1)<<" iYend="<<ghostLimit[iQ].getEnd(1)<<endl;
         }
-
+        for (int iQ=0;iQ<lattice::nQ;++iQ){
+            cout<<"iQ="<<iQ<<"MPI neighbor="<<MPIneighbor[iQ];
+        }
     }
-	
+
+    // Finds the neighbor of the node (iX,iY) in the direction of iQ for a periodic block.
     void getPeriodicNeighbor (const int& iX, const int& iY, const int& iQ, int& iX_neighbor, int& iY_neighbor) {
         iX_neighbor = (iX + lattice::Qvector[iQ][0]+nX)%nX;
         iY_neighbor = (iY + lattice::Qvector[iQ][1]+nY)%nY;
     }
 
-
+    // Stream in reversed direction over the whole block. The mirror() function, after this can
+    // correct them.
     void revStream(){
         int id, id_neighbor;
         int iX_neighbor,iY_neighbor;
@@ -82,6 +91,7 @@ public:
         }
     }
 	
+    // Mirroring distros all over the block.
     void mirror(){
         for (int iNode=0;iNode<size;++iNode){
             nodes[iNode].mirror();
@@ -100,10 +110,15 @@ public:
         }
     }
 
+    // Setting the limits of boundaries in shape of :
+    // iXbegin->iXend
+    // iYbegin->iYend
+    // for edges and corners in D2Q9 lattice.
+    // Note, Ghost nodes are excluded.
+    // Note, block boundaries are identified by iQ.
     void setBoundaryLimit(){
 
         int iXend,iYend,iXbegin,iYbegin;
-
         for (int iQ=0;iQ<lattice::nQ;++iQ){
             if (lattice::Qvector[iQ][0]==1){
                 iXbegin = nX-2;
@@ -131,7 +146,11 @@ public:
         }
     }
 
-    // setting Ghost Layer limits for D2Q9
+    // Setting the limits of Ghost nodes boundaries in shape of :
+    // iXbegin->iXend
+    // iYbegin->iYend
+    // for edges and corners in D2Q9 lattice.
+    // Note, boundaries are identified by iQ.
     void setGhostLimit(){
         int iXbegin,iYbegin,iXend,iYend;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
