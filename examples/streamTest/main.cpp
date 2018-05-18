@@ -1,5 +1,5 @@
 #include <iostream>
-#include "brick.h"
+#include "block.h"
 using namespace std;
 
 /*
@@ -16,16 +16,16 @@ using namespace std;
  Note if direction is zero, the package doesn't move.
  */
 
-int trackF(const Brick& brick, double& epsilon) {
+int trackF(const Block& block, double& epsilon) {
     int found = 0;
-    for (int iX = 0; iX < brick.getNX(); ++iX) {
-        for (int iY = 0; iY < brick.getNY(); ++iY) {
+    for (int iX = 0; iX < block.getNX(); ++iX) {
+        for (int iY = 0; iY < block.getNY(); ++iY) {
             for (int iQ = 0; iQ < lattice::nQ; ++iQ) {
-                if (brick(iX, iY)[iQ] > epsilon) {
+                if (block(iX, iY)[iQ] > epsilon) {
                     ++found;
                     cout << "The package is now at iX=" << iX << ", iY=" << iY
                             << ", Q direction=" << iQ << " with value of ="
-                            << brick(iX, iY)[iQ] << endl;
+                            << block(iX, iY)[iQ] << endl;
                 }
             }
         }
@@ -42,7 +42,7 @@ int main() {
     int nX = 5;
     int nY = 5;
 
-    Brick brick(nX, nY);
+    Block block(nX, nY);
     double epsilon = (double) 0.000000000000001;
     double package_value = (double) 1.000000000000001;
     cout.precision(16);
@@ -51,17 +51,17 @@ int main() {
     for (int iQ = 0; iQ < lattice::nQ; ++iQ) {
         cout << "=========  A new direction is tested: iQ= " << iQ
                 << "===========" << endl;
-        brick(iX, iY)[iQ] = package_value;
+        block(iX, iY)[iQ] = package_value;
         for (int t = 0; t < 10; ++t) {
-            brick.stream();
+            block.stream();
             cout << "----- TimeStep = " << t << " -----" << endl;
-            found = trackF(brick, epsilon);
+            found = trackF(block, epsilon);
             if (found != 1) {
-                cout << "Something happend to the package!";
+                cout << "Something happened to the package!";
                 break;
             }
         }
-        brick = (double) 0.;
+        block = (double) 0.;
     }
     return 0;
 }
