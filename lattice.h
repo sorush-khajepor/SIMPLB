@@ -7,7 +7,7 @@
 #include<vector>
 #include<iostream>
 
-// D2Q9 lattice description
+// D2Q9 lattice namespace
 namespace D2Q9 {
 
 // Number of streaming vectors (Q-vectors)
@@ -22,9 +22,10 @@ const double cQad = 1.;
 
 // Lattice vectors, which are usually shown by "ei" in the literature.
 // In SIMPLB, for the sake of being easily identified, they are called Qvectors.
-// With the indexes of iQ =     0      1       2        3      4
-const int Qvector[nQ][nD]  = {{ 0, 0},
-		                      { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1}, //                              5       6       7       8
+// With the indexes of iQ =      0        1        2        3        4
+const int Qvector[nQ][nD]  = {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1},
+
+//                               5        6        7        8
                               { 1, 1}, {-1, 1}, {-1,-1}, { 1,-1}};
 
 /* D2Q9 lattice configuration
