@@ -1,33 +1,53 @@
 #include <iostream>
+#include "lattice.h"
 using namespace std;
 
 
 class Box{
-    int begin[1];
-    int end[1];
+
+    int begin[lattice::nD];
+    int end[lattice::nD];
+
 public:
+
     Box(){
-       begin[0]=0;
-       begin[1]=0;
-       end[0] = 0;
-       end[1] = 0;
+       for (int iD=0;iD<lattice::nD;++iD){
+           begin[iD]=0;
+           end[iD] = 0;
+       }
     }
+
     Box(const int& iXbegin,const int& iYbegin,const int& iXend,const int& iYend){
       set(iXbegin,iYbegin,iXend,iYend);
     }
     void set (const int& iXbegin,const int& iYbegin,const int& iXend,const int& iYend){
        begin[0]=iXbegin;
        begin[1]=iYbegin;
+       begin[2]=0;
        end[0] = iXend;
        end[1] = iYend;
+       end[2] = 1;
     }
-    int& getBegin(const int& i) {return begin[i];}
-    int& getEnd  (const int& i){return end[i];}
-    int getLength(const int& i){return end[i]-begin[i];}
+
+    // Begining of the loop over the box, or box origin
+    int& getBegin(const int& iD) {return begin[iD];}
+    // End of the loop over the box
+    int& getEnd  (const int& iD){return end[iD];}
+    // Get length of a dimension
+    int getL(const int& iD){return end[iD]-begin[iD];}
     // Volume in 2D is surface area of the box
-    int getVolume(){return getLength(0)*getLength(1);}
+    int getVol(){
+        int vol=1;
+        for (int iD=0;iD<lattice::nD;++iD){
+            vol*=getL(iD);
+        }
+        return vol;
+    }
+
     void print(){
-        cout<<"Begin vector iX="<<begin[0]<<" iY="<<begin[1];
-        cout<<"End   vector iX="<<  end[0]<<" iY="<<end[1];
+        for (int iD=0;iD<lattice::nD;++iD){
+            cout<<"Dimension="<<iD<<" Begin ="<<begin[iD]<<" End ="<<end[iD]<<" Length="<<getL(iD)<<endl;
+        }
+        cout<<" Volume="<<getVol()<<endl;
     }
 };
