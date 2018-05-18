@@ -91,3 +91,9 @@ void collisionForcedBGK::calcRho_U(const Node& node,double& Rho, double U[]){
     Rho = getRho(node);
     calcU(node,Rho,U);
 }
+
+//////////// Standard Bounce-Back /////////////
+
+void bounceBack::collide(Node& node){
+	node.mirror();
+}

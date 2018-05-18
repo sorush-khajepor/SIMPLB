@@ -5,7 +5,9 @@ class Node;
 //////////// BGK Collision /////////////
 
 class collisionBGK{
-    // Relaxation parameter
+	// Destructor
+	virtual ~collisionBGK() {}
+	// Relaxation parameter
 	double omega;
 public:
 	// Collision step
@@ -38,4 +40,14 @@ public:
     virtual void calcU(const Node&, const double& rho, double u[]) override;
     // Calculate fluid velocity and density on node
     virtual void calcRho_U(const Node& node,double& rho, double u[]) override;
+};
+
+//////////// Standard Bounce-Back /////////////
+
+class bounceBack : public collisionBGK{
+	// Relaxation parameter
+	double omega;
+public:
+	// Collision step
+	virtual void collide(Node& node) override;
 };
