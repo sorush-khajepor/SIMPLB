@@ -55,7 +55,7 @@ public:
     }
 
     int getShortIndex (const int& iX, const int& iY) const {return iX*dim[1]+iY;}
-
+    int getLongIndex (const int& iNode, int& iX, int& iY) const {iX=iNode/dim[1];iY=iNode%dim[1];}
 
 
     Node& operator[] (const int& iNode){return nodes[iNode];}
