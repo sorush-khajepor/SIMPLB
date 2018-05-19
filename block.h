@@ -4,7 +4,11 @@
 class Block {
 
 protected:
-    int nX, nY, size;
+
+    int origin[lattice::nD];
+    int dim[lattice::nD];
+    // Volume of the block (surface area in 2D)
+    int vol;
 
     Node *nodes;
 
@@ -12,15 +16,25 @@ protected:
     // Note, each Block is assigned to an MPI process.
     int MPIneighbor[lattice::nQ];
 
-    Box boundaryLimit[lattice::nQ];
+    LoopLimit boundaryLimit[lattice::nQ];
 
-    Box ghostLimit[lattice::nQ];
+    LoopLimit ghostLimit[lattice::nQ];
 
 public:
 
-    Block(int nX_, int nY_):nX(nX_),nY(nY_),size(nX*nY){
+    Block(int origin_[], int dim_[]){
+	// Initialization of geometry
+	vol =1;
+       for (int iD=0;iD<lattice::nD;++iD){
+	       origin[iD]=origin_[iD];
+	       dim[iD]=dim_[iD];
+	       vol*=dim_[iD];
+       }
 		
-        nodes = new Node[nX_*nY_];
+       // Memory allocation for nodes
+        nodes = new Node[vol];
+
+	//  Set loop limits for actual and ghost  boundaries 
         setBoundaryLimit();
         setGhostLimit();
 		
@@ -39,7 +53,7 @@ public:
 
     Node& operator[] (const int& iNode){return nodes[iNode];}
 
-    int getNX() const {return nX;}
+    int getNX() const {return geo.getDim(0);}
     int getNY() const {return nY;}
     int getSize() const {return size;}
 
@@ -66,7 +80,7 @@ public:
 
     // Finds the neighbor of the node (iX,iY) in the direction of iQ for a periodic block.
     void getPeriodicNeighbor (const int& iX, const int& iY, const int& iQ, int& iX_neighbor, int& iY_neighbor) {
-        iX_neighbor = (iX + lattice::Qvector[iQ][0]+nX)%nX;
+        iX_neighbor = (iX + lattice::Qvector[iQ][0]+geo.getDim(0))%geo.getDim(0);
         iY_neighbor = (iY + lattice::Qvector[iQ][1]+nY)%nY;
     }
 
@@ -77,7 +91,7 @@ public:
         int iX_neighbor,iY_neighbor;
         int iQ;
 		
-        for (int iX=0;iX<nX;++iX){
+        for (int iX=0;iX<geo.getDim(0);++iX){
             for (int iY=0;iY<nY;++iY){
                 id = getIndex(iX,iY);
                 for (int i=0;i<lattice::nQ/2;++i){
