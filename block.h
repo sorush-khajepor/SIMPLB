@@ -55,6 +55,7 @@ public:
     }
 
     int getIndex (const int& iX, const int& iY) const {return iX*nY+iY;}
+
 		
 
     Node& operator[] (const int& iNode){return nodes[iNode];}
@@ -86,7 +87,7 @@ public:
 
     // Finds the neighbor of the node (iX,iY) in the direction of iQ for a periodic block.
     void getPeriodicNeighbor (const int& iX, const int& iY, const int& iQ, int& iX_neighbor, int& iY_neighbor) {
-        iX_neighbor = (iX + lattice::Qvector[iQ][0]+geo.getDim(0))%geo.getDim(0);
+        iX_neighbor = (iX + lattice::Qvector[iQ][0]+nX)%nX;
         iY_neighbor = (iY + lattice::Qvector[iQ][1]+nY)%nY;
     }
 
