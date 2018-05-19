@@ -60,12 +60,12 @@ public:
 
     Node& operator[] (const int& iNode){return nodes[iNode];}
 
-    int& getDim(iD) const {return dim[iD];}
-    int& getOrigin(iD) const {return origin[iD];}
-    int& getVol() const {return vol;}
+    const int& getDim(iD) const {return dim[iD];}
+    const int& getOrigin(iD) const {return origin[iD];}
+    const int& getVol() const {return vol;}
 
     // Gives the neighbor block (or MPI process) in the direction of iQ.
-    int& getMPIneighbor (const int& iQ){return MPIneighbor[iQ];}
+    int& getMPIneighbor (const int& iQ) {return MPIneighbor[iQ];}
 
     // Prints class members
     void print() {
