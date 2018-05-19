@@ -97,7 +97,7 @@ public:
         int iX_neighbor,iY_neighbor;
         int iQ;
 		
-        for (int iX=0;iX<geo.getDim(0);++iX){
+        for (int iX=0;iX<nX;++iX){
             for (int iY=0;iY<nY;++iY){
                 id = getIndex(iX,iY);
                 for (int i=0;i<lattice::nQ/2;++i){
