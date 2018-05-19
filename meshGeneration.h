@@ -12,7 +12,7 @@ class MeshGeneration{
 class StructuredMeshGeneration :public MeshGeneration {
 
     // Whole domain dimensions
-    Box dim;
+    int dim[lattice::nD];
 
     bool periodic[lattice::nD];
 
@@ -37,12 +37,22 @@ class StructuredMeshGeneration :public MeshGeneration {
 
     }
 
-    int getShortIndex (const int& iX, const int& iY) {return iX*dim.getL(1)+iY;}
+    int getShortIndex (const int iXYZ[]) {
+        int sum=0;
+        for (int j = 0; j < lattice::nD; j++) {
+            int n = iXYZ[j];
+            for (int k = j+1; k < lattice::nD; k++) {
+                n* = dim[k]
+            }
+            sum += n;
+        }
+        return sum;}
 
-    void getPeriodicNeighbor (const int& iX, const int& iY, const int& iQ, int& iX_neighbor, int& iY_neighbor) {
+    void getPeriodicNeighbor (const int iXYZ[], const int& iQ, int iXYZ_neighbor[]) {
+        for (int iD = 0; iD < lattice::nD; iD++) {
 
-        iX_neighbor = (iX + lattice::Qvector[iQ][0]+dim.getL(0))%dim.getL(0);
-        iY_neighbor = (iY + lattice::Qvector[iQ][1]+dim.getL(1))%dim.getL(1);
+            iXYZ_neighbor[iD] = (iXYZ[iD] + lattice::Qvector[iQ][iD]+dim[iD])%dim[iD];
+        }
     }
 
 
