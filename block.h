@@ -5,14 +5,19 @@ class Block {
 
 protected:
 
+    // Origin of the block (including the ghost layers)
     int origin[lattice::nD];
+
+    // Dimensions of the block (including the ghost layers)
     int dim[lattice::nD];
+
     // Volume of the block (surface area in 2D)
     int vol;
 
+    // Nodes in this block
     Node *nodes;
 
-    // This stores neighbor blocks (or MPI processes) in the directions of Qvector in the MPI world.
+    // Neighbor blocks (or MPI processes) in the directions of Qvectors in the MPI world.
     // Note, each Block is assigned to an MPI process.
     int MPIneighbor[lattice::nQ];
 
@@ -23,15 +28,16 @@ protected:
 public:
 
     Block(int origin_[], int dim_[]){
-	// Initialization of geometry
+
+        // Initialization of geometry
 	vol =1;
-       for (int iD=0;iD<lattice::nD;++iD){
+        for (int iD=0;iD<lattice::nD;++iD){
 	       origin[iD]=origin_[iD];
 	       dim[iD]=dim_[iD];
 	       vol*=dim_[iD];
-       }
+        }
 		
-       // Memory allocation for nodes
+        // Memory allocation for nodes
         nodes = new Node[vol];
 
 	//  Set loop limits for actual and ghost  boundaries 
@@ -53,7 +59,7 @@ public:
 
     Node& operator[] (const int& iNode){return nodes[iNode];}
 
-    int getNX() const {return geo.getDim(0);}
+    int getNX() const {return nX;}
     int getNY() const {return nY;}
     int getSize() const {return size;}
 
