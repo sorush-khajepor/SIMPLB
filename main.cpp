@@ -11,7 +11,7 @@ struct BoxLimit{
 	int iYbegin, iYend;
 };
 
-void getLongIndex (const int& i, const int&nY, int& iX, int& iY)  {iX = i/nY; iY=i%nY;}	
+void getLongIndex (const int& i, const int&nY, int& iX, int& iY)  {iX = i/nY; iY=i%nY;}
 
 
 int getShortIndex (const int& iX, const int& iY, const int& nY) {return iX*nY+iY;}
@@ -60,8 +60,8 @@ for (int iQ=0;iQ<lattice::nQ;++iQ){
 // setting border limits(not mortar layer) for D2Q9 - check for loop limits of 0 if it runs!
 BoxLimit blockLimit[lattice::nQ];
 {
-int NNX=block.getNX()-1;
-int NNY=block.getNY()-1;
+int NNX=block.getDim(0)-1;
+int NNY=block.getDim(1)-1;
 int BBegin = 1;
 for (int iQ=0;iQ<lattice::nQ;++iQ){
     if (lattice::Qvector[iQ][0]==1){
@@ -95,8 +95,8 @@ for (int iQ=0;iQ<lattice::nQ;++iQ){
 }
 // setting Mortar Layer limits for D2Q9 - check for loop limits of 0 if it runs!
 BoxLimit mortarLimit[lattice::nQ];
-int NNX=block.getNX();
-int NNY=block.getNY();
+int NNX=block.getDim(0);
+int NNY=block.getDim(1);
 int BBegin = 0;
 for (int iQ=0;iQ<lattice::nQ;++iQ){
     if (lattice::Qvector[iQ][0]==1){
@@ -140,7 +140,7 @@ int stride;
 int iQ = 1;
 int length = (blockLimit[iQ].iYend - blockLimit[iQ].iYbegin)*(blockLimit[iQ].iXend - blockLimit[iQ].iXbegin);
 if (iQ==2 or iQ==4){
-    stride = block.getNY();
+    stride = block.getDim(1);
 } else {
     stride = 1;
 }
@@ -269,11 +269,11 @@ for (int iQ=1;iQ<lattice::nQ;++iQ){
 }
 
 block.stream();
-//block.revStream(1,block.getNX(),1,block.getNY());
+//block.revStream(1,block.getDim(0),1,block.getDim(1));
 MPI_Barrier(MPI_COMM_WORLD);
 // Printing
-for (int iX=0;iX<block.getNX();++iX){
-    for (int iY=0;iY<block.getNY();++iY){
+for (int iX=0;iX<block.getDim(0);++iX){
+    for (int iY=0;iY<block.getDim(1);++iY){
         for (int iQ=0;iQ<lattice::nQ;++iQ)
         {
             double f = block(iX,iY)[iQ];
@@ -313,4 +313,3 @@ return 0;
 
 
 // int loadBalancer (int N,int &begin,int &end){
-

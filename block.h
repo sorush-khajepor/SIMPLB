@@ -60,8 +60,8 @@ public:
 
     Node& operator[] (const int& iNode){return nodes[iNode];}
 
-    const int& getDim(iD) const {return dim[iD];}
-    const int& getOrigin(iD) const {return origin[iD];}
+    const int& getDim(const int& iD) const {return dim[iD];}
+    const int& getOrigin(const int& iD) const {return origin[iD];}
     const int& getVol() const {return vol;}
 
     // Gives the neighbor block (or MPI process) in the direction of iQ.
