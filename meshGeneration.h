@@ -13,7 +13,7 @@ class StructuredMeshGeneration :public MeshGeneration {
 
     // Whole domain dimensions
     int dim[lattice::nD];
-
+    int vol;
     bool periodic[lattice::nD];
 
     public:
@@ -24,12 +24,12 @@ class StructuredMeshGeneration :public MeshGeneration {
 
     virtual void decompose() {
         // Number of Block nodes in X-direction .There are 2 ghost layers along X-axis
-        int nBlockNodeX = sqrt(dim.getVol()/mpiTools.getSize())+2;
+        int nBlockNodeX = sqrt(getVol()/mpiTools.getSize())+2;
         // Number of Blox nodes in Y-direction is equal to X direction. Blocks are boxes.
         int nBlockNodeY = nBlockNodeX;
 
-        int nBlockX = dim.getL(0)/(nBlockNodeX-2);
-        int nBlockY = dim.getL(1)/(nBlockNodeY-2);
+        int nBlockX = dim[0]/(nBlockNodeX-2);
+        int nBlockY = dim[1]/(nBlockNodeY-2);
 
         // TODO Change block input to Box input
         Block block(nBlockNodeX,nBlockNodeY);
@@ -37,12 +37,14 @@ class StructuredMeshGeneration :public MeshGeneration {
 
     }
 
+    const int& getVol() const {return vol;}
+
     int getShortIndex (const int iXYZ[]) {
         int sum=0;
         for (int j = 0; j < lattice::nD; j++) {
             int n = iXYZ[j];
             for (int k = j+1; k < lattice::nD; k++) {
-                n* = dim[k]
+                n*= dim[k];
             }
             sum += n;
         }
