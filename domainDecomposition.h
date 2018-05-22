@@ -16,12 +16,12 @@ class StructuredDecomposition :public DomainDecomposition {
     int dim[lattice::nD];
     int nBlock[lattice::nD];
     int nBlockNode[lattice::nD];
-    int vol=0;
+    int vol;
     bool periodic[lattice::nD];
 
     public:
 
-    StructuredDecomposition(const int& dim_[], const int& periodic_[]){
+    StructuredDecomposition(const int dim_[], const bool periodic_[]){
 
        // Domain initialization
        vol=1;
@@ -44,7 +44,6 @@ class StructuredDecomposition :public DomainDecomposition {
         return nBlockNode[iD];
     }
 
-    }
 
     virtual void decompose(){
 
@@ -72,7 +71,8 @@ class StructuredDecomposition :public DomainDecomposition {
             }
             sum += n;
         }
-        return sum;}
+        return sum;
+    }
 
     void getPeriodicNeighbor (const int iXYZ[], const int& iQ, int iXYZ_neighbor[]) {
         for (int iD = 0; iD < lattice::nD; iD++) {
@@ -81,8 +81,7 @@ class StructuredDecomposition :public DomainDecomposition {
         }
     }
 
-    void getLongIndex (const int& i, int& iXYZ[]) 
-    {
+    void getLongIndex (const int& i, int iXYZ[]) {
 
         int R = i;
         for (int j = 0; j < lattice::nD; j++) {

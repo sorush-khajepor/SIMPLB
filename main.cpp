@@ -1,17 +1,18 @@
-
+#include "block.h"
+#include "domainDecomposition.h"
 
 int main(){
 
 // Domain Size
-int dim[1] = {10,10};
+int dim[2] = {10,10};
 
 // Domain periodic vector
-bool periodic[1]={true};
+bool periodic[2]={true};
 
 // Square domain docomposition
 StructuredDecomposition(dim,periodic);
 
-Block(StructuredDecomposition);
+//Block block(StructuredDecomposition);
 
 // Define bulk collision 
 // Define boundary collision
