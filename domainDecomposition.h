@@ -12,12 +12,20 @@ class DomainDecomposition{
 
 class StructuredDecomposition :public DomainDecomposition {
 
+    protected:
     // Whole domain dimensions
     int dim[lattice::nD];
-    int nBlock[lattice::nD];
-    int nBlockNode[lattice::nD];
+    // Whole domain volume (number of all nodes before considering ghosts)
     int vol;
+    // Number of Blocks in the wholde domain  along each (X-Y-Z) direction
+    int nBlock[lattice::nD];
+    // Number of Nodes inside the block of this computer including ghosts
+    int nBlockNode[lattice::nD];
+    // Shows the periodicity of domain along cartesian(X-Y-Z) axes
     bool periodic[lattice::nD];
+
+    // Cartesian index of the block in domain or MPI world
+    int blockCartIndex[lattice::nD];
 
     public:
 
@@ -30,6 +38,8 @@ class StructuredDecomposition :public DomainDecomposition {
           periodic[iD]=periodic_[iD];
 	      vol*=dim_[iD];
        }
+
+       coomputeBlockCartIndex(mpiTools.getRank(),blockCartIndex);
 
        decompose();
 
@@ -46,16 +56,24 @@ class StructuredDecomposition :public DomainDecomposition {
 
 
     virtual void decompose(){
-
-        // Number of Block nodes in X-direction .There are 2 ghost layers along X-axis
-        nBlockNode[0] = pow((double)getVol()/mpiTools.getSize(),1.0/lattice::nD)+2;
-        // Number of Blox nodes in Y-direction is equal to X direction. Blocks are boxes.
-        for (int iD=1;iD<lattice::nD;++iD){
+        // Note, here number domain nodes/number of cpus should have squared or
+        // cubic root.
+        // Estimation of Number of Block nodes in X/Y/Z-direction.
+        nNodeXYZ = pow((double)getVol()/mpiTools.getSize(),1.0/lattice::nD);
+        // Number of Block nodes along Y&Z axes is equal to X axis.
+/*        for (int iD=1;iD<lattice::nD;++iD){
             nBlockNode[iD] = nBlockNode[0];
-        }
+      }*/
 
         for (int iD=0;iD<lattice::nD;++iD){
-            nBlock[iD] = dim[iD]/(nBlockNode[iD]-2);
+            nBlock[iD] = dim[iD]/nNodeXYZ;
+        }
+
+
+        int remainder[lattice::nD];
+        for (int iD=0;iD<lattice::nD;++iD){
+            remainder[iD] = dim[iD]%nBlock[iD];
+            nBlockNode[iD]= (dim[iD]+nBlock[iD]-
         }
     
     }
@@ -81,7 +99,7 @@ class StructuredDecomposition :public DomainDecomposition {
         }
     }
 
-    void getLongIndex (const int& i, int iXYZ[]) {
+    void computeCartIndex (const int& i, int iXYZ[]) {
 
         int R = i;
         for (int j = 0; j < lattice::nD; j++) {
