@@ -1,27 +1,53 @@
 #include <iostream>
-#include "block.h"
+//#include "block.h"
 #include <math.h>
 #include "mpiTools.h"
+#include "lattice.h"
 
-class MeshGeneration{
+class DomainDecomposition{
 
-    virtual void generate()=0;
+    virtual void decompose()=0;
 
 };
 
-class StructuredMeshGeneration :public MeshGeneration {
+class StructuredDecomposition :public DomainDecomposition {
 
     // Whole domain dimensions
-    int dim[lattice::nD]={0};
-    int nBlock[lattice::nD]={0};
+    int dim[lattice::nD];
+    int nBlock[lattice::nD];
+    int nBlockNode[lattice::nD];
     int vol=0;
-    bool periodic[lattice::nD]={true};
+    bool periodic[lattice::nD];
 
     public:
 
-    virtual void generate(){
+    StructuredDecomposition(const int& dim_[], const int& periodic_[]){
 
-        int nBlockNode[lattice::nD]; 
+       // Domain initialization
+       vol=1;
+       for (int iD=0;iD<lattice::nD;++iD){
+          dim[iD]=dim_[iD];
+          periodic[iD]=periodic_[iD];
+	      vol*=dim_[iD];
+       }
+
+       decompose();
+
+    }
+
+    const int& getNBlock(const int& iD) const{
+        return nBlock[iD];
+    }
+
+
+    const int& getNBlockNode(const int& iD) const{
+        return nBlockNode[iD];
+    }
+
+    }
+
+    virtual void decompose(){
+
         // Number of Block nodes in X-direction .There are 2 ghost layers along X-axis
         nBlockNode[0] = pow((double)getVol()/mpiTools.getSize(),1.0/lattice::nD)+2;
         // Number of Blox nodes in Y-direction is equal to X direction. Blocks are boxes.
@@ -33,9 +59,6 @@ class StructuredMeshGeneration :public MeshGeneration {
             nBlock[iD] = dim[iD]/(nBlockNode[iD]-2);
         }
     
-        Block block(nBlockNodeX,nBlockNodeY);
-
-
     }
 
     const int& getVol() const {return vol;}
