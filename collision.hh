@@ -1,5 +1,6 @@
 #include "collision.h"
 #include "node.h"
+#include "geometryTools.h"
 
 //////////// BGK Collision /////////////
 
@@ -97,3 +98,25 @@ void collisionForcedBGK::calcRho_U(const Node& node,double& Rho, double U[]){
 void bounceBack::collide(Node& node){
 	node.mirror();
 }
+
+//////////// Zou-He Boundary Condition /////////////
+
+void ZouHeCollisionBottom::collide(Node& node){
+
+}
+
+double ZouHeCollisionBottom::getRho(const Node& node){
+    double Rho = 0.;
+    int norm[2] = {0,-1};
+    Rho = (2.*(Node[0]+Node[1]+Node[3])+4.*(Node[4]+Node[7]+Node[8])+(getDotProduct(norm,force)))/2.*(1.+(getDotProduct(norm,u)));
+    }
+    return Rho;
+}
+
+void ZouHeCollisionBottom::getMissingDistros(Node& node, double& Rho){
+	Rho = getRho(node);
+	Node[2] = (Node[4]+2.*(Rho*u[1])/3.);
+	Node[5] = (Node[7]+(Rho*u[1])/6.+(Rho*u[0])/2.+(Node[3]-Node[1])/2.-(force[0]+force[1])/4.);
+	Node[6] = (Node[8]+(Rho*u[1])/6.+(Rho*u[0])/2.+(Node[1]-Node[3])/2.-(-force[0]+force[1])/4.);
+}
+

@@ -34,6 +34,7 @@ const int Qvector[nQ][nD]  = {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1},
 *      3  0  1
 *      7  4  8
 */
+
 // Index of opposite vectors of {0, 1, 2, 3, 4, 5, 6, 7, 8}
 const int iOpposite[nQ] =       {0, 3, 4, 1, 2, 7, 8, 5, 6};
 

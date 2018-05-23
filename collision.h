@@ -6,10 +6,11 @@ class Node;
 
 class collisionBGK{
 	// Destructor
-	virtual ~collisionBGK() {}
+	//virtual ~collisionBGK() {}
 	// Relaxation parameter
 	double omega;
 public:
+	collisionBGK(const double& omega_){omega=omega_;};
 	// Collision step
     virtual void collide(Node& node);
     // Equilibrium distribution function
@@ -50,4 +51,22 @@ class bounceBack : public collisionBGK{
 public:
 	// Collision step
 	virtual void collide(Node& node) override;
+};
+
+//////////// Zou-He Boundary Condition /////////////
+
+class ZouHeCollisionBottom : public collisionBGK{
+	// Relaxation parameter
+	double omega;
+	// External Force
+	double force[lattice::nD];
+	// Fluid velocity
+	double u[lattice::nD];
+public:
+	// Collision step
+	virtual void collide(Node& node) override;
+    // Fluid density
+    virtual double getRho(const Node& node) override;
+    // Get missing Distribution functions
+    virtual void getMissingDistros(Node& node, double& Rho);
 };

@@ -90,3 +90,28 @@ class LoopLimit :public TwoPoints{
 	cout<<" Volume="<<getVol()<<endl;
 	}
 };
+
+int getDotProduct(const int vec1[],const int vec2[]){
+	int sum=0.;
+	for (int iD=0;iD<lattice::nD;++iD){
+		sum += vec1[iD]*vec2[iD];
+	}
+	return sum;
+}
+
+double getDotProduct(const double vec1[],const double vec2[]){
+	double sum=0.;
+	for (int iD=0;iD<lattice::nD;++iD){
+		sum += vec1[iD]*vec2[iD];
+	}
+	return sum;
+}
+
+double getDotProduct(const int vec1[],const double vec2[]){
+	double sum=0.;
+	for (int iD=0;iD<lattice::nD;++iD){
+		sum += vec1[iD]*vec2[iD];
+	}
+	return sum;
+}
+
