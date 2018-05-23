@@ -41,6 +41,12 @@ class StructuredDecomposition :public DomainDecomposition {
           periodic[iD]=periodic_[iD];
 	      vol*=dim_[iD];
        }
+
+       // Set number of blocks in the domain. dimXYZ is an Estimation of Block dimension in X/Y/Z-direction.
+        int dimXYZ = pow((double)getVol()/mpiTools.getSize(),1.0/lattice::nD);
+        for (int iD=0;iD<lattice::nD;++iD){
+            nBlock[iD] = dim[iD]/dimXYZ;
+        }
     }
 
     const int& getNBlock(const int& iD) const{
@@ -49,18 +55,10 @@ class StructuredDecomposition :public DomainDecomposition {
 
 
 //Add neighbor
-    virtual void computeBlockGeometry(int blockOrigin[],int blockDim[],int blockCartIndex[]){
+    virtual void computeBlockGeometry(int blockOrigin[],int blockDim[],int blockCartIndex[],int iBlockNeighbor[]){
         // Note, here number domain nodes/number of cpus should have squared or
         // cubic root.
-        // Estimation of Block dimension in X/Y/Z-direction.
         computeBlockCartIndex(mpiTools.getRank(),blockCartIndex);
-
-        int dimXYZ = pow((double)getVol()/mpiTools.getSize(),1.0/lattice::nD);
-       
-        for (int iD=0;iD<lattice::nD;++iD){
-            nBlock[iD] = dim[iD]/dimXYZ;
-        }
-
 
         for (int iD=0;iD<lattice::nD;++iD){
             int remainder = dim[iD]%nBlock[iD];
@@ -71,9 +69,8 @@ class StructuredDecomposition :public DomainDecomposition {
         }
 
         // Setting block neighbors
-        int iNeighbor[lattice::nQ];
         for (int iQ=0;iQ<lattice::nQ;++iQ){
-            iNeighbor[iQ]=getNeighbor(iQ);
+            iBlockNeighbor[iQ]=getNeighbor(iQ);
         }
     
     }
@@ -121,6 +118,7 @@ class StructuredDecomposition :public DomainDecomposition {
             return getShortIndex(neighborCartIndex);
         }
     }
+
     void computeBlockCartIndex (const int& i, int iXYZ[]) {
 
         int R = i;
