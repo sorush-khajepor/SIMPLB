@@ -64,9 +64,16 @@ class StructuredDecomposition :public DomainDecomposition {
 
         for (int iD=0;iD<lattice::nD;++iD){
             int remainder = dim[iD]%nBlock[iD];
-            blockDim[iD]= (dim[iD]+nBlock[iD]-blockCartIndex[iD] -1)/nBlock[iD];
-            blockOrigin[iD] = dim[iD]/nBlock[iD]*blockCartIndex[iD]+min(blockCartIndex[iD],remainder);
+            // Dimension of the block along XYZ axes including 2 ghost layers
+            blockDim[iD]= (dim[iD]+nBlock[iD]-blockCartIndex[iD] -1)/nBlock[iD]+2;
+            // Origin of the block starts from the ghost layer.
+            blockOrigin[iD] = dim[iD]/nBlock[iD]*blockCartIndex[iD]+std::min(blockCartIndex[iD],remainder)-1;
+        }
 
+        // Setting block neighbors
+        int iNeighbor[lattice::nQ];
+        for (int iQ=0;iQ<lattice::nQ;++iQ){
+            iNeighbor[iQ]=getNeighbor(iQ);
         }
     
     }
@@ -92,6 +99,28 @@ class StructuredDecomposition :public DomainDecomposition {
         }
     }
 
+    int getNeighbor (const int& iQ) {
+        int blockCartIndex[lattice::nD];
+        int neighborCartIndex[lattice::nD];
+        computeBlockCartIndex(mpiTools.getRank(),blockCartIndex);
+        bool is_null = false;
+        for (int iD = 0; iD < lattice::nD; iD++) {
+            if (periodic[iD]){
+                neighborCartIndex[iD] = (blockCartIndex[iD] + lattice::Qvector[iQ][iD]+nBlock[iD])%nBlock[iD];
+            }else{
+
+                neighborCartIndex[iD] = blockCartIndex[iD] + lattice::Qvector[iQ][iD];
+            }
+            if (neighborCartIndex[iD]<0 or neighborCartIndex[iD]>nBlock[iD]-1){
+                is_null = true;
+            }
+        }
+        if (is_null){
+            return MPI_PROC_NULL;
+        }else{
+            return getShortIndex(neighborCartIndex);
+        }
+    }
     void computeBlockCartIndex (const int& i, int iXYZ[]) {
 
         int R = i;
