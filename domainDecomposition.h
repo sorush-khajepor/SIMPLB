@@ -6,7 +6,6 @@
 
 class DomainDecomposition{
 
-//    virtual void decompose()=0;
 
 };
 
@@ -22,14 +21,6 @@ class StructuredDecomposition :public DomainDecomposition {
     // Shows the periodicity of domain along cartesian(X-Y-Z) axes
     bool periodic[lattice::nD];
 
-/*
-    // Cartesian index of the block in domain or MPI world
-    int blockCartIndex[lattice::nD];
-    int blockOrigin[lattice::nD];
-    int blockDim[lattice::nD];
-    // Number of Nodes inside the block of this computer including ghosts
-    int nBlockNode[lattice::nD];
-*/
     public:
 
     StructuredDecomposition(const int dim_[], const bool periodic_[]){
@@ -54,7 +45,6 @@ class StructuredDecomposition :public DomainDecomposition {
     }
 
 
-//Add neighbor
     virtual void computeBlockGeometry(int blockOrigin[],int blockDim[],int blockCartIndex[],int iBlockNeighbor[]){
         // Note, here number domain nodes/number of cpus should have squared or
         // cubic root.
@@ -120,17 +110,15 @@ class StructuredDecomposition :public DomainDecomposition {
     }
 
     void computeBlockCartIndex (const int& i, int iXYZ[]) {
-
         int R = i;
         for (int j = 0; j < lattice::nD; j++) {
             int n =1;
             for (int k = j+1; k < lattice::nD; k++) {
                 n*=nBlock[k];
             }
-                iXYZ[j]= R/n;
-                R=R%n;
+            iXYZ[j]= R/n;
+            R=R%n;
         }
-
     }
 
 };
