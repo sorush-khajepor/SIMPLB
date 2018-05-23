@@ -55,3 +55,22 @@ public:
     }
 
 };
+
+// A class containing only distros with no other members for contiguous memory allocation
+class Distro{
+        double f[lattice::nQ]={0.};
+public:
+        double& getF(const int& iQ){
+            return f[iQ];
+        }
+        Distro& operator= (const Distro& rhs){
+                for (int iQ=0;iQ<lattice::nQ;iQ++){
+                    f[iQ] = rhs.f[iQ];
+                }
+            }
+        Distro& operator= (const Node& rhs){
+                for (int iQ=0;iQ<lattice::nQ;iQ++){
+                    f[iQ] = rhs[iQ];
+                }
+            }
+};
