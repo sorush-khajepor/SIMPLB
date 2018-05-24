@@ -17,6 +17,12 @@ public:
     // Gives the neighbor block (or MPI process) in the lattice direction of iQ.
     int& getNeighbor (const int& iQ) {return neighbor[iQ];}
 
+    // Prints class members
+    void print() {
+        for (int iQ=0;iQ<lattice::nQ;++iQ){
+            cout<<"iQ="<<iQ<<"MPI neighbor="<<neighbor[iQ];
+        }
+    }
 
 
 

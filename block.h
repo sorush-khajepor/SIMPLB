@@ -17,9 +17,6 @@ protected:
     // Nodes in this block
     Node *nodes;
 
-    // Neighbor blocks (or MPI processes) in the directions of Qvectors in the MPI world.
-    // Note, each Block is assigned to an MPI process.
-    int MPIneighbor[lattice::nQ];
 
     LoopLimit boundaryLimit[lattice::nQ];
 
@@ -63,9 +60,6 @@ public:
     const int& getDim(const int& iD) const {return dim[iD];}
     const int& getOrigin(const int& iD) const {return origin[iD];}
     const int& getVol() const {return vol;}
-
-    // Gives the neighbor block (or MPI process) in the direction of iQ.
-    int& getMPIneighbor (const int& iQ) {return MPIneighbor[iQ];}
 
     // Prints class members
     void print() {
