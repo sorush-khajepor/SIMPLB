@@ -3,21 +3,29 @@
 
 
 // A class containing only data vector with the length of lattice vectors.
-// double lattice vector(dlv)
+// array with the length of lattice directions (nQ)
 template <class T>
-class dlv{
+class arrayNQ{
         T data[lattice::nQ];
 public:
-        dlv(){
+        arrayNQ(){
             *this=0.;
         }
+        arrayNQ(const T rhs[]){
+            *this=rhs;
+        }
 
-        dlv& operator= (const T& rhs){
+        arrayNQ& operator= (const T& rhs){
                 for (int iQ=0;iQ<lattice::nQ;iQ++){
                     data[iQ] = rhs;
                 }
             }
-        dlv& operator= (const dlv& rhs){
+        arrayNQ& operator= (const T rhs[]){
+                for (int iQ=0;iQ<lattice::nQ;iQ++){
+                    data[iQ] = rhs[iQ];
+                }
+            }
+        arrayNQ& operator= (const arrayNQ& rhs){
                 for (int iQ=0;iQ<lattice::nQ;iQ++){
                     data[iQ] = rhs[iQ];
                 }
@@ -36,97 +44,42 @@ public:
         }
 };
 
-// A class containing only integer data type vector with the length of lattice vectors.
-// integer lattice vector(ilv)
-class ilv{
-        int data[lattice::nQ];
+
+// An array containing only cartesian data.
+template <class T>
+class arrayND{
+        T data[lattice::nD];
 public:
-        ilv(){
+        arrayND(){
             *this=0.;
         }
 
-        ilv& operator= (const int& rhs){
-                for (int iQ=0;iQ<lattice::nQ;iQ++){
-                    data[iQ] = rhs;
-                }
-            }
-        ilv& operator= (const ilv& rhs){
-                for (int iQ=0;iQ<lattice::nQ;iQ++){
-                    data[iQ] = rhs[iQ];
-                }
-            }
-        int& operator[](const int& iQ){
-            return data[iQ];
-        }
-        const int& operator[] (const int& iQ)const{
-            return data[iQ];
-        }
-        void print () {
-            for (int iQ=0;iQ<lattice::nQ;iQ++){
-                std::cout<< "data("<<iQ<<") = "<<data[iQ]<< std::endl;
-            }
-        }
-};
-
-// A class containing only a cartesian vector.
-// Double Cartesian Vector(dcv)
-
-class dcv{
-        double data[lattice::nD];
-public:
-        dcv(){
-            *this=0.;
+        arrayND(const T rhs[]){
+            *this=rhs;
         }
 
-        dcv& operator= (const double& rhs){
+        arrayND& operator= (const T& rhs){
                 for (int iD=0;iD<lattice::nD;iD++){
                     data[iD] = rhs;
                 }
             }
-        dcv& operator= (const dcv& rhs){
+        arrayND& operator= (const arrayND& rhs){
                 for (int iD=0;iD<lattice::nD;iD++){
                     data[iD] = rhs[iD];
                 }
             }
-        double& operator[](const int& iD){
+        arrayND& operator= (const T rhs[]){
+                for (int iD=0;iD<lattice::nD;iD++){
+                    data[iD] = rhs[iD];
+                }
+            }
+        T& operator[](const int& iD){
             return data[iD];
         }
-        const double& operator[] (const int& iD)const{
+        const T& operator[] (const int& iD)const{
             return data[iD];
         }
 
-        void print () {
-            for (int iD=0;iD<lattice::nD;iD++){
-                std::cout<< "data("<<iD<<") = "<<data[iD]<< std::endl;
-            }
-        }
-};
-
-// A class containing only integer data type vector with the length of lattice vectors.
-// integer cartesian vector(icv)
-class icv{
-        int data[lattice::nD];
-public:
-        icv(){
-            *this=0.;
-        }
-
-        icv& operator= (const int& rhs){
-            for (int iD=0;iD<lattice::nD;iD++){
-                data[iD] = rhs;
-            }
-        }
-        icv& operator= (const icv& rhs){
-            for (int iD=0;iD<lattice::nD;iD++){
-                data[iD] = rhs[iD];
-            }
-        }
-        int& operator[](const int& iD){
-            return data[iD];
-        }
-        const int& operator[] (const int& iD)const{
-            return data[iD];
-        }
         void print () {
             for (int iD=0;iD<lattice::nD;iD++){
                 std::cout<< "data("<<iD<<") = "<<data[iD]<< std::endl;
