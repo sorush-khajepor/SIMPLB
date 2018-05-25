@@ -43,21 +43,27 @@ public:
 
     }
 
+    // Give access to boundary&Ghost Limit members
     arrayNQ<LoopLimit>& getBoundaryLimit(){return boundaryLimit;}
     arrayNQ<LoopLimit>& getGhostLimit(){return ghostLimit;}
 
+    // Operator () is reserved for accessing nodes
     Node& operator() (const int& iX, const int& iY){
         return nodes[getShortIndex(iX,iY)];
     }
 
-	Node const& operator() (const int& iX, const int& iY) const {
+    // Constant access to Node through operator ()
+	const Node& operator() (const int& iX, const int& iY) const {
         return nodes[getShortIndex(iX,iY)];
     }
 
+	// Get single number index of the node from cartesian index
     int getShortIndex (const int& iX, const int& iY) const {return iX*dim[1]+iY;}
+
+    // Get Cartesian index (iX,iY,iZ) from single index
     int getLongIndex (const int& iNode, int& iX, int& iY) const {iX=iNode/dim[1];iY=iNode%dim[1];}
 
-
+    // Operator [] is resereved for accessing  a node via single index
     Node& operator[] (const int& iNode){return nodes[iNode];}
 
     const int& getDim(const int& iD) const {return dim[iD];}
@@ -111,11 +117,13 @@ public:
         }
     }
 
+    // Domain stream
     void stream(){
         revStream();
         mirror();
     }
 
+    // Replace the data of this block with another block (rhs)
     Block& operator= (const double& rhs){
 
         for (int iNode=0;iNode<vol;++iNode){
