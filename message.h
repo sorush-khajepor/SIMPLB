@@ -16,10 +16,10 @@ class Message{
     arrayNQ<std::vector<arrayNQ<double> > > boundaryRecvBuffer;
 
     // Limits of loops for covering block boundaries (ignoring ghosts and non-interacting neighbors)
-    arrayNQ<LoopLimit> boundaryLimit;
+    arrayNQ<LoopLimit> sendLimit;
 
     // Limits of loops for covering block boundaries (including ghosts but ignoring non-interacting neighbors)
-    arrayNQ<LoopLimit> ghostLimit;
+    arrayNQ<LoopLimit> recvLimit;
 
 public:
 
@@ -29,6 +29,11 @@ public:
         // set neighbors
         neighbor=neighbor_;
 
+        // set Send&Receive buffer
+        sendLimit = block.getBoundaryLimit;
+        recvLimit = block.getGhostLimit;
+
+        // set send&receive buffer
         // boundaries start from iQ = 1. Because borderlimit[iQ=0] gives whole domain.
         for (int iQ=1;iQ<lattice::nQ;++iQ){
 
