@@ -41,13 +41,10 @@ public:
 
         // set send&receive buffer
         // boundaries start from iQ = 1. Because borderlimit[iQ=0] gives whole domain.
+        // note, getVol() for sendLimit is equal to recvLimit. But they have different begining and end.
         for (int iQ=1;iQ<lattice::nQ;++iQ){
 
-            int length = block.getBoundaryLimit()[iQ].getVol();
-            if (neighbor[iQ]==MPI_PROC_NULL){
-                length = 0;
-            }
-
+            int length = sendLimit[iQ].getVol();
             for (int iBuffer=0;iBuffer<length;++iBuffer){
                 arrayNQ<double> f;
                 boundarySendBuffer[iQ].push_back(f);
