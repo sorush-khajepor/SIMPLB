@@ -68,7 +68,7 @@ public:
         for (int iQ=1;iQ<lattice::nQ;++iQ){
 
             int iBuffer =0;
-            LoopLimit bl = sendLimit[iQ];
+            LoopLimit sl = sendLimit[iQ];
 
             // Sweeping inside a boundary
             for (int iX=sl.getBegin(0);iX<sl.getEnd(0);++iX){
@@ -85,8 +85,7 @@ public:
         arrayNQ<MPI_Request> req;
         // Loop over different boundaries
         for (int iQ=1;iQ<lattice::nQ;++iQ){
-            int length = block.getBoundaryLimit()[iQ].getVol();
-            if (neighbor[iQ]==MPI_PROC_NULL){continue;}
+            int length = sendLimit[iQ].getVol();
             MPI_Isend(&boundarySendBuffer[iQ][0], length*lattice::nQ, MPI_DOUBLE,neighbor[iQ], iQ, MPI_COMM_WORLD,&req[iQ]);
         }
     }
