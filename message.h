@@ -1,6 +1,5 @@
 #include "lattice.h"
 #include "mpiTools.h"
-//#include "container.h"
 #include "block.h"
 
 class Message{
@@ -15,23 +14,23 @@ class Message{
     // Boundary receive buffer, exactly the same length as send buffer.
     arrayNQ<std::vector<arrayNQ<double> > > boundaryRecvBuffer;
 
-    // Limits of loops for covering block boundaries (ignoring ghosts and non-interacting neighbors)
+    // Limits of loops for send buffer (ignoring ghosts and non-interacting neighbors)
     arrayNQ<LoopLimit> sendLimit;
 
-    // Limits of loops for covering block boundaries (including ghosts but ignoring non-interacting neighbors)
+    // Limits of loops for receive buffer (including ghosts but ignoring non-interacting neighbors)
     arrayNQ<LoopLimit> recvLimit;
 
 public:
 
     // Construction
-    Message(Block& block, const arrayNQ<int>& neighbor_){
+    Message(arrayNQ<LoopLimit>& blockBoundaryLimit,arrayNQ<LoopLimit>& blockGhostLimit, const arrayNQ<int>& neighbor_){
 
         // set neighbors
         neighbor=neighbor_;
 
         // set limits of send & receive buffer
-        sendLimit = block.getBoundaryLimit();
-        recvLimit = block.getGhostLimit();
+        sendLimit = blockBoundaryLimit;
+        recvLimit = blockGhostLimit;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
             if (neighbor[iQ]==MPI_PROC_NULL){
                 sendLimit[iQ].set(0,0,0,0);
@@ -93,7 +92,7 @@ public:
 
     void receive(Block& block){
 
-        // Receive buffer
+        // MPI Receive buffer
         arrayNQ<MPI_Status> status;
         for (int iQ=1;iQ<lattice::nQ;++iQ){
             int iOp = lattice::iOpposite[iQ];
