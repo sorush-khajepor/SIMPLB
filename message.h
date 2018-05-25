@@ -97,8 +97,7 @@ public:
         arrayNQ<MPI_Status> status;
         for (int iQ=1;iQ<lattice::nQ;++iQ){
             int iOp = lattice::iOpposite[iQ];
-            int length = block.getBoundaryLimit()[iQ].getVol();
-            if (neighbor[iQ]==MPI_PROC_NULL){continue;}
+            int length = recvLimit[iQ].getVol();
             MPI_Recv(&boundaryRecvBuffer[iQ][0], length*lattice::nQ, MPI_DOUBLE,neighbor[iQ], iOp, MPI_COMM_WORLD,&status[iQ]);
         }
 
