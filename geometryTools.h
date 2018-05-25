@@ -20,6 +20,14 @@ class TwoPoints{
     TwoPoints(const int& iX0,const int& iY0,const int& iX1,const int& iY1){
       set(iX0,iY0,iX1,iY1);
     }
+
+    TwoPoints& operator=(const TwoPoints& rhs){
+        for (int iD=0;iD<lattice::nD;iD++){
+            point0[iD]=rhs.point0[iD];
+            point1[iD]=rhs.point1[iD];
+        }
+    }
+
     // Setting 2D points
     void set (const int& iX0,const int& iY0,const int& iX1,const int& iY1){
        point0[0]=iX0;
