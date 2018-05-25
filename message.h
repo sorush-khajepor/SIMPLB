@@ -50,14 +50,16 @@ public:
     void send(Block& block){
 
         // Copy domain boundaries to send buffer
-        // Boundary Loop
+        // Loop over all boundaries
         for (int iQ=1;iQ<lattice::nQ;++iQ){
 
+            // No neighbor, no copy!
             if (neighbor[iQ]==MPI_PROC_NULL){continue;}
 
             int iBuffer =0;
             LoopLimit bl = block.getBoundaryLimit()[iQ];
 
+            // Sweeping inside a boundary
             for (int iX=bl.getBegin(0);iX<bl.getEnd(0);++iX){
                 for (int iY=bl.getBegin(1);iY<bl.getEnd(1);++iY){
 
@@ -66,6 +68,10 @@ public:
                 }
             }
         }
+
+
+
+
     }
 
 };

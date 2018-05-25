@@ -37,6 +37,11 @@ public:
                     data[iQ] = rhs[iQ];
                 }
             }
+        void copyTo(Node& lhs){
+                for (int iQ=0;iQ<lattice::nQ;iQ++){
+                     lhs[iQ]=data[iQ];
+                }
+        }
         T& operator[](const int& iQ){
             return data[iQ];
         }
