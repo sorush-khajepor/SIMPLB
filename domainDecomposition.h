@@ -1,5 +1,4 @@
 #include <iostream>
-//#include "block.h"
 #include <math.h>
 #include "mpiTools.h"
 #include "lattice.h"
