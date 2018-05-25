@@ -9,10 +9,15 @@ class Message{
     // Note, each Block is assigned to an MPI process.
     arrayNQ<int> neighbor;
     
+    // Boundary send buffer, including nQ boundaries. Each is a vector of distros.
     arrayNQ<std::vector<arrayNQ<double> > > boundarySendBuffer;
+
+    // Boundary receive buffer, exactly the same length as send buffer.
     arrayNQ<std::vector<arrayNQ<double> > > boundaryRecvBuffer;
 
 public:
+
+    // Construction
     Message(Block& block, const arrayNQ<int>& neighbor_){
 
         // set neighbors
@@ -37,8 +42,7 @@ public:
     }
     
     // Gives the neighbor block (or MPI process) in the lattice direction of iQ.
-    const int& getNeighbor (const int& iQ) const {return neighbor[iQ];}
-    const arrayNQ<int>& getNeighbor () const {return neighbor;}
+    const arrayNQ<int>& getNeighbor() const {return neighbor;}
 
     // Prints class members
     void print() {
