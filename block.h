@@ -2,6 +2,8 @@
 #include"geometryTools.h"
 #include"container.h"
 
+class Message;
+
 class Block {
 
 protected:
@@ -17,6 +19,9 @@ protected:
 
     // Nodes in this block
     Node *nodes;
+
+    // Communication with neighboring blocks
+    Message *message;
 
     // Limits of loops for covering block boundaries (ignoring ghosts)
     arrayNQ<LoopLimit> boundaryLimit;
@@ -43,6 +48,11 @@ public:
 	    // Set loop limits for actual and ghost  boundaries
         setBoundaryLimit();
         setGhostLimit();
+
+        //TODO Set message
+        //message = new Message (boundaryLimit,ghostLimit,neighbor);
+
+
     }
 
     // Give access to boundary&Ghost Limit members
