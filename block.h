@@ -1,6 +1,7 @@
 #include"node.h"
 #include"geometryTools.h"
 #include"container.h"
+
 class Block {
 
 protected:
@@ -17,17 +18,19 @@ protected:
     // Nodes in this block
     Node *nodes;
 
-
+    // Limits of loops for covering block boundaries (ignoring ghosts)
     arrayNQ<LoopLimit> boundaryLimit;
 
+    // Limits of loops for covering block boundaries (including ghosts)
     arrayNQ<LoopLimit> ghostLimit;
 
 public:
 
+    // Block construction
     Block(int origin_[], int dim_[]){
 
         // Initialization of geometry
-	vol =1;
+	    vol =1;
         for (int iD=0;iD<lattice::nD;++iD){
 	       origin[iD]=origin_[iD];
 	       dim[iD]=dim_[iD];
@@ -37,10 +40,9 @@ public:
         // Memory allocation for nodes
         nodes = new Node[vol];
 
-	//  Set loop limits for actual and ghost  boundaries
+	    // Set loop limits for actual and ghost  boundaries
         setBoundaryLimit();
         setGhostLimit();
-
     }
 
     // Give access to boundary&Ghost Limit members
@@ -66,6 +68,7 @@ public:
     // Operator [] is resereved for accessing  a node via single index
     Node& operator[] (const int& iNode){return nodes[iNode];}
 
+    // Give access to block geometry
     const int& getDim(const int& iD) const {return dim[iD];}
     const int& getOrigin(const int& iD) const {return origin[iD];}
     const int& getVol() const {return vol;}
