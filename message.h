@@ -104,11 +104,10 @@ public:
 
         // Copying receive buffer into block ghost nodes
         for (int iQ=1;iQ<lattice::nQ;++iQ){
-            if (neighbor[iQ]==MPI_PROC_NULL){continue;}
             int iBuffer =0;
-            LoopLimit gl = block.getGhostLimit()[iQ];
-            for (int iX=gl.getBegin(0);iX<gl.getEnd(0);++iX){
-                for (int iY=gl.getBegin(1);iY<gl.getEnd(1);++iY){
+            LoopLimit rl = recvLimit[iQ];
+            for (int iX=rl.getBegin(0);iX<rl.getEnd(0);++iX){
+                for (int iY=rl.getBegin(1);iY<rl.getEnd(1);++iY){
 
                     boundaryRecvBuffer[iQ][iBuffer].copyTo(block(iX,iY));
                     iBuffer++;
