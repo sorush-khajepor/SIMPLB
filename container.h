@@ -2,8 +2,7 @@
 #include<iostream>
 
 
-// A class containing only data vector with the length of lattice vectors.
-// array with the length of lattice directions (nQ)
+// A class containing only data array with the length of number of lattice velocities (nQ)
 template <class T>
 class arrayNQ{
         T data[lattice::nQ];
@@ -50,36 +49,45 @@ template <class T>
 class arrayND{
         T data[lattice::nD];
 public:
+        // Initialized with zero
         arrayND(){
             *this=0.;
         }
-
+        
+        // Initialized with a standard C array
         arrayND(const T rhs[]){
             *this=rhs;
         }
 
+        // Filling array with one value 
         arrayND& operator= (const T& rhs){
                 for (int iD=0;iD<lattice::nD;iD++){
                     data[iD] = rhs;
                 }
             }
+        // Filling array with another arrayND
         arrayND& operator= (const arrayND& rhs){
                 for (int iD=0;iD<lattice::nD;iD++){
                     data[iD] = rhs[iD];
                 }
             }
+        // Filling array with another standard c array
         arrayND& operator= (const T rhs[]){
                 for (int iD=0;iD<lattice::nD;iD++){
                     data[iD] = rhs[iD];
                 }
             }
+        // An array member is called by its index
         T& operator[](const int& iD){
             return data[iD];
         }
+        
+        // Const call to an array member
         const T& operator[] (const int& iD)const{
             return data[iD];
         }
-
+        
+        // Print array on screen
         void print () {
             for (int iD=0;iD<lattice::nD;iD++){
                 std::cout<< "data("<<iD<<") = "<<data[iD]<< std::endl;
