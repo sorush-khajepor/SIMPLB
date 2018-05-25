@@ -82,13 +82,32 @@ public:
 
 
     void receive(Block& block){
+
+        // Receive buffer
         arrayNQ<MPI_Status> status;
-        // Loop over different boundaries
         for (int iQ=1;iQ<lattice::nQ;++iQ){
             int iOp = lattice::iOpposite[iQ];
             int length = block.getBoundaryLimit()[iQ].getVol();
             if (neighbor[iQ]==MPI_PROC_NULL){continue;}
             MPI_Recv(&boundaryRecvBuffer[iQ][0], length*lattice::nQ, MPI_DOUBLE,neighbor[iQ], iOp, MPI_COMM_WORLD,&status[iQ]);
+        }
+
+
+        // Copying receive buffer into block ghost nodes
+        for (int iQ=1;iQ<lattice::nQ;++iQ){
+            if (neighbor[iQ]==MPI_PROC_NULL){continue;}
+            int iBuffer =0;
+            LoopLimit gl = block.getGhostLimit()[iQ];
+            for (int iX=gl.getBegin(0);iX<gl.getEnd(0);++iX){
+                for (int iY=gl.getBegin(1);iY<gl.getEnd(1);++iY){
+                    boundaryRecvBuffer[iQ][iBuffer].copyTo(block(iX,iY));
+            //        for (int iQQ=0;iQQ<lattice::nQ;++iQQ){
+             //           block(iX,iY)[iQQ] = boundaryRecvBuffer[iQ][iBuffer].getF(iQQ);
+             //       }
+
+                    iBuffer++;
+                }
+            }
         }
     }
 
