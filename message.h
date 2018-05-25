@@ -15,6 +15,12 @@ class Message{
     // Boundary receive buffer, exactly the same length as send buffer.
     arrayNQ<std::vector<arrayNQ<double> > > boundaryRecvBuffer;
 
+    // Limits of loops for covering block boundaries (ignoring ghosts and non-interacting neighbors)
+    arrayNQ<LoopLimit> boundaryLimit;
+
+    // Limits of loops for covering block boundaries (including ghosts but ignoring non-interacting neighbors)
+    arrayNQ<LoopLimit> ghostLimit;
+
 public:
 
     // Construction
@@ -34,7 +40,7 @@ public:
             for (int iBuffer=0;iBuffer<length;++iBuffer){
                 arrayNQ<double> f;
                 boundarySendBuffer[iQ].push_back(f);
-                boundaryRecvBuffer[iQ].push_back(f);
+                boundaryRecvBuffer[iQ].push_back(f) ;
             }
         }
     }
@@ -100,11 +106,8 @@ public:
             LoopLimit gl = block.getGhostLimit()[iQ];
             for (int iX=gl.getBegin(0);iX<gl.getEnd(0);++iX){
                 for (int iY=gl.getBegin(1);iY<gl.getEnd(1);++iY){
-                    boundaryRecvBuffer[iQ][iBuffer].copyTo(block(iX,iY));
-            //        for (int iQQ=0;iQQ<lattice::nQ;++iQQ){
-             //           block(iX,iY)[iQQ] = boundaryRecvBuffer[iQ][iBuffer].getF(iQQ);
-             //       }
 
+                    boundaryRecvBuffer[iQ][iBuffer].copyTo(block(iX,iY));
                     iBuffer++;
                 }
             }
