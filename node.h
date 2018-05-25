@@ -30,6 +30,12 @@ public:
         }
     }
 
+    Node& operator= (const double rhs[]){
+        for (int iQ=0;iQ<lattice::nQ;iQ++){
+            data[iQ] = rhs[iQ];
+        }
+    }
+
     // Set node with another node
     Node& operator= (const Node& rhs){
 
