@@ -67,15 +67,12 @@ public:
         // Loop over all boundaries
         for (int iQ=1;iQ<lattice::nQ;++iQ){
 
-            // No neighbor, no copy!
-            if (neighbor[iQ]==MPI_PROC_NULL){continue;}
-
             int iBuffer =0;
-            LoopLimit bl = block.getBoundaryLimit()[iQ];
+            LoopLimit bl = sendLimit[iQ];
 
             // Sweeping inside a boundary
-            for (int iX=bl.getBegin(0);iX<bl.getEnd(0);++iX){
-                for (int iY=bl.getBegin(1);iY<bl.getEnd(1);++iY){
+            for (int iX=sl.getBegin(0);iX<sl.getEnd(0);++iX){
+                for (int iY=sl.getBegin(1);iY<sl.getEnd(1);++iY){
 
                     boundarySendBuffer[iQ][iBuffer] = block(iX,iY);
                     iBuffer++;
