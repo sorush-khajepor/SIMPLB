@@ -32,7 +32,7 @@ public:
 
     Node& operator= (const double rhs[]){
         for (int iQ=0;iQ<lattice::nQ;iQ++){
-            data[iQ] = rhs[iQ];
+            f[iQ] = rhs[iQ];
         }
     }
 

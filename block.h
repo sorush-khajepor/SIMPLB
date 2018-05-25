@@ -1,6 +1,6 @@
 #include"node.h"
 #include"geometryTools.h"
-
+#include"container.h"
 class Block {
 
 protected:
@@ -18,9 +18,9 @@ protected:
     Node *nodes;
 
 
-    LoopLimit boundaryLimit[lattice::nQ];
+    arrayNQ<LoopLimit> boundaryLimit;
 
-    LoopLimit ghostLimit[lattice::nQ];
+    arrayNQ<LoopLimit> ghostLimit;
 
 public:
 
@@ -42,6 +42,9 @@ public:
         setGhostLimit();
 
     }
+
+    arrayNQ<LoopLimit>& getBoundaryLimit(){return boundaryLimit;}
+    arrayNQ<LoopLimit>& getGhostLimit(){return ghostLimit;}
 
     Node& operator() (const int& iX, const int& iY){
         return nodes[getShortIndex(iX,iY)];
@@ -73,9 +76,6 @@ public:
         for (int iQ=0;iQ<lattice::nQ;++iQ){
             cout<<"iQ="<<iQ<<"ghostLimit iXbegin="<<ghostLimit[iQ].getBegin(0)<<" iXend="<<ghostLimit[iQ].getEnd(0)
                 <<"  iYbegin="<<ghostLimit[iQ].getBegin(1)<<" iYend="<<ghostLimit[iQ].getEnd(1)<<endl;
-        }
-        for (int iQ=0;iQ<lattice::nQ;++iQ){
-            cout<<"iQ="<<iQ<<"MPI neighbor="<<MPIneighbor[iQ];
         }
     }
 
