@@ -29,9 +29,15 @@ public:
         // set neighbors
         neighbor=neighbor_;
 
-        // set Send&Receive buffer
-        sendLimit = block.getBoundaryLimit;
-        recvLimit = block.getGhostLimit;
+        // set limits of send & receive buffer
+        sendLimit = block.getBoundaryLimit();
+        recvLimit = block.getGhostLimit();
+        for (int iQ=0;iQ<lattice::nQ;++iQ){
+            if (neighbor[iQ]==MPI_PROC_NULL){
+                sendLimit[iQ].set(0,0,0,0);
+                recvLimit[iQ].set(0,0,0,0);
+            }
+        }
 
         // set send&receive buffer
         // boundaries start from iQ = 1. Because borderlimit[iQ=0] gives whole domain.
