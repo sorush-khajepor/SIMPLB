@@ -1,8 +1,8 @@
 #include "lattice.h"
 #include <iostream>
 #include <vector>
-
 using namespace std;
+
 
 class Node {
 
@@ -44,6 +44,15 @@ public:
         }
     }
 
+
+/*
+    // Set node with arrayNQ
+    Node& operator= (const arrayNQ<double>& rhs){
+        for (int iQ=0;iQ<lattice::nQ;iQ++){
+            f[iQ] = rhs[iQ];
+        }
+    }
+*/
 
     void mirror () {
         int iQ;

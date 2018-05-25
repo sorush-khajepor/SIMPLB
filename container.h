@@ -1,6 +1,9 @@
+#ifndef CONTAINER_H
+#define CONTAINER_H
+
+
 #include "lattice.h" 
 #include<iostream>
-
 
 // A class containing only data array with the length of number of lattice velocities (nQ)
 template <class T>
@@ -25,6 +28,11 @@ public:
                 }
             }
         arrayNQ& operator= (const arrayNQ& rhs){
+                for (int iQ=0;iQ<lattice::nQ;iQ++){
+                    data[iQ] = rhs[iQ];
+                }
+            }
+        arrayNQ& operator= (const Node& rhs){
                 for (int iQ=0;iQ<lattice::nQ;iQ++){
                     data[iQ] = rhs[iQ];
                 }
@@ -94,3 +102,5 @@ public:
             }
         }
 };
+
+#endif
