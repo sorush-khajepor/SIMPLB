@@ -71,15 +71,24 @@ public:
 
 
         // MPI Send
-         //s,reqr;
-//        MPI_Status status;
+        arrayNQ<MPI_Request> req;
         // Loop over different boundaries
-        for (int iQ=1;iQ<lattice::nQ;++iQ)
-        {
-            MPI_Request req;
+        for (int iQ=1;iQ<lattice::nQ;++iQ){
             int length = block.getBoundaryLimit()[iQ].getVol();
             if (neighbor[iQ]==MPI_PROC_NULL){continue;}
-            MPI_Isend(&boundarySendBuffer[iQ][0], length*lattice::nQ, MPI_DOUBLE,neighbor[iQ], iQ, MPI_COMM_WORLD,&req);
+            MPI_Isend(&boundarySendBuffer[iQ][0], length*lattice::nQ, MPI_DOUBLE,neighbor[iQ], iQ, MPI_COMM_WORLD,&req[iQ]);
+        }
+    }
+
+
+    void receive(Block& block){
+        arrayNQ<MPI_Status> status;
+        // Loop over different boundaries
+        for (int iQ=1;iQ<lattice::nQ;++iQ){
+            int iOp = lattice::iOpposite[iQ];
+            int length = block.getBoundaryLimit()[iQ].getVol();
+            if (neighbor[iQ]==MPI_PROC_NULL){continue;}
+            MPI_Recv(&boundaryRecvBuffer[iQ][0], length*lattice::nQ, MPI_DOUBLE,neighbor[iQ], iOp, MPI_COMM_WORLD,&status[iQ]);
         }
     }
 
