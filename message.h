@@ -70,8 +70,17 @@ public:
         }
 
 
-
-
+        // MPI Send
+         //s,reqr;
+//        MPI_Status status;
+        // Loop over different boundaries
+        for (int iQ=1;iQ<lattice::nQ;++iQ)
+        {
+            MPI_Request req;
+            int length = block.getBoundaryLimit()[iQ].getVol();
+            if (neighbor[iQ]==MPI_PROC_NULL){continue;}
+            MPI_Isend(&boundarySendBuffer[iQ][0].getF(0), length*lattice::nQ, MPI_DOUBLE,neighbor(iQ), iQ, MPI_COMM_WORLD,&reqs);
+        }
     }
 
 };
