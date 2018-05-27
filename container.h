@@ -2,9 +2,10 @@
 #define CONTAINER_H
 
 
-#include "lattice.h" 
-#include<iostream>
+#include "lattice.h"
 
+#include<iostream>
+/*
 // A class containing only data array with the length of number of lattice velocities (nQ)
 template <class T>
 class arrayNQ{
@@ -106,6 +107,118 @@ public:
                 std::cout<< "data("<<iD<<") = "<<data[iD]<< std::endl;
             }
         }
+};
+
+*/
+
+template <class T, int N>
+class SArray{
+
+protected:
+        T data[N];
+
+public:
+        SArray(){
+            *this=0.;
+        }
+        SArray(const T rhs[]){
+            *this=rhs;
+        }
+
+        SArray& operator= (const T& rhs){
+                for (int i=0;i<N;i++){
+                    data[i] = rhs;
+                }
+                return *this;
+            }
+
+        SArray& operator= (const T rhs[]){
+                for (int i=0;i<N;i++){
+                    data[i] = rhs[i];
+                }
+                return *this;
+            }
+
+        void copyTo (const T lhs[]){
+                for (int i=0;i<N;i++){
+                    lhs[i]=data[i];
+                }
+        }
+
+        template<class U>
+        auto get(SArray<U,N>& rhs){
+            int arr;
+          //              for (int i=0;i<N;i++){
+            //                arr.data[i] = this->data[i] + rhs.data[i];
+              //          }
+                        return arr;
+           };
+
+        SArray& operator= (const SArray& rhs){
+                for (int i=0;i<N;i++){
+                    data[i] = rhs[i];
+                }
+                return *this;
+            }
+        SArray operator+ (const SArray& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] + rhs.data[i];
+                }
+                return arr;
+            }
+        SArray operator- (const SArray& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] - rhs.data[i];
+                }
+                return arr;
+            }
+        SArray operator* (const SArray& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] * rhs.data[i];
+                }
+                return arr;
+            }
+        SArray operator/ (const SArray& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] / rhs.data[i];
+                }
+                return arr;
+            }
+
+        const T sum() const {
+                T s = T();
+                for (int i=0;i<N;i++){
+                    s += data[i];
+                }
+                return s;
+        }
+
+        T& operator[](const int& i){
+            return data[i];
+        }
+        const T& operator[] (const int& i)const{
+            return data[i];
+        }
+
+        void print () {
+            for (int i=0;i<N;i++){
+                std::cout<< "data("<<i<<") = "<<data[i]<< std::endl;
+            }
+        }
+};
+
+template <class T>
+class ArrayNQ :public SArray<T, lattice::nQ>{
+
+};
+
+template <class T>
+class ArrayND :public SArray<T, lattice::nD>{
+
 };
 
 #endif
