@@ -9,7 +9,7 @@ int main() {
     std::cout<<a.sum()<<std::endl;
 
     // Type casting
-    SArray<int,3>(a).print();
+//    SArray<int,3>(a).print();
 
 
     (a*2*a).print();
@@ -24,12 +24,15 @@ int main() {
 
     std::cout<<(c+2.5).sum()<<std::endl;
 
-    double arr[2]={1,5};
+    double arr[2]={1.9,5};
     ArrayND<double> d;
     d = arr;
     d.print();
 
     std::cout<<c.dot(d)<<std::endl;
+    ArrayND<int> f;
+    f=4;
+    std::cout<<d.dot(f)<<std::endl;
 
 
     return 0;

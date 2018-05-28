@@ -133,6 +133,7 @@ public:
             }
             return arr;
         }
+
         SArray& operator= (const T& rhs){
                 for (int i=0;i<N;i++){
                     data[i] = rhs;
