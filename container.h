@@ -251,6 +251,15 @@ class ArrayND :public SArray<T, lattice::nD>{
 
     using SArray<T,lattice::nD>::operator=;
 
+    template<class U>
+    operator ArrayND<U>()  {
+        ArrayND<U> arr;
+        for (int i=0;i<lattice::nD;i++){
+            arr[i] = this->data[i];
+        }
+        return arr;
+    }
+
     T dot(const ArrayND& arr){
         return (*this * arr).sum();
     }
