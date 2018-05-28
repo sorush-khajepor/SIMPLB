@@ -67,13 +67,13 @@ public:
         arrayND(){
             *this=0.;
         }
-        
+
         // Initialized with a standard C array
         arrayND(const T rhs[]){
             *this=rhs;
         }
 
-        // Filling array with one value 
+        // Filling array with one value
         arrayND& operator= (const T& rhs){
                 for (int iD=0;iD<lattice::nD;iD++){
                     data[iD] = rhs;
@@ -95,12 +95,12 @@ public:
         T& operator[](const int& iD){
             return data[iD];
         }
-        
+
         // Const call to an array member
         const T& operator[] (const int& iD)const{
             return data[iD];
         }
-        
+
         // Print array on screen
         void print () {
             for (int iD=0;iD<lattice::nD;iD++){
@@ -145,14 +145,6 @@ public:
                 }
         }
 
-        template<class U>
-        auto get(SArray<U,N>& rhs){
-            int arr;
-          //              for (int i=0;i<N;i++){
-            //                arr.data[i] = this->data[i] + rhs.data[i];
-              //          }
-                        return arr;
-           };
 
         SArray& operator= (const SArray& rhs){
                 for (int i=0;i<N;i++){
