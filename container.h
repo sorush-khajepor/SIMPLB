@@ -133,7 +133,6 @@ public:
             }
             return arr;
         }
-        
         SArray& operator= (const T& rhs){
                 for (int i=0;i<N;i++){
                     data[i] = rhs;
@@ -167,6 +166,13 @@ public:
                 }
                 return arr;
             }
+        SArray operator+ (const T& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] + rhs;
+                }
+                return arr;
+            }
         SArray operator- (const SArray& rhs) const {
                 SArray arr;
                 for (int i=0;i<N;i++){
@@ -174,10 +180,24 @@ public:
                 }
                 return arr;
             }
+        SArray operator- (const T& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] - rhs;
+                }
+                return arr;
+            }
         SArray operator* (const SArray& rhs) const {
                 SArray arr;
                 for (int i=0;i<N;i++){
                     arr.data[i] = this->data[i] * rhs.data[i];
+                }
+                return arr;
+            }
+        SArray operator* (const T& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] * rhs;
                 }
                 return arr;
             }
@@ -189,6 +209,13 @@ public:
                 return arr;
             }
 
+        SArray operator/ (const T& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] / rhs;
+                }
+                return arr;
+            }
         const T sum() const {
                 T s = T();
                 for (int i=0;i<N;i++){
