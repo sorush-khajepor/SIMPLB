@@ -16,10 +16,6 @@ const int nQ = 9;
 // Lattice dimensions
 const int nD = 2;
 
-typedef SArray<double,nD> doubleND;
-typedef SArray<int,nD> intND;
-typedef SArray<double,nQ> doubleNQ;
-typedef SArray<int,nQ> intNQ;
 // Squared of micro-velocity (c)
 const double cSqr = 1.;
 const double cQad = 1.;
@@ -52,4 +48,10 @@ const SArray<double,nQ> weight = { 4./9.,
 //                                      5       6       7       8   -
                                 	   1./36., 1./36., 1./36., 1./36.};
 }
+
+typedef SArray<double,lattice::nD> doubleND;
+typedef SArray<int,lattice::nD> intND;
+typedef SArray<double,lattice::nQ> doubleNQ;
+typedef SArray<int,lattice::nQ> intNQ;
+
 #endif
