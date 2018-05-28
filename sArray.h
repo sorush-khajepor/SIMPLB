@@ -1,9 +1,6 @@
 #ifndef SARRAY_H
 #define SARRAY_H
 
-
-#include "lattice.h"
-
 #include<iostream>
 
 template <class T, int N>
@@ -119,7 +116,7 @@ public:
                 }
                 return arr;
             }
-            
+
         virtual const T sum() const {
                 T s = T();
                 for (int i=0;i<N;i++){
@@ -145,34 +142,4 @@ public:
             }
         }
 };
-/*
-// Lattice vector
-template <class T>
-class ArrayNQ :public SArray<T, lattice::nQ>{
-
-};
-
-// Cartesian vector
-template <class T>
-class ArrayND :public SArray<T, lattice::nD>{
-
-    public:
-
-    using SArray<T,lattice::nD>::SArray;
-    using SArray<T,lattice::nD>::operator=;
-
-    template<class U>
-    operator ArrayND<U>()  {
-        ArrayND<U> arr;
-        for (int i=0;i<lattice::nD;i++){
-            arr[i] = this->data[i];
-        }
-        return arr;
-    }
-
-    T dot(const ArrayND& arr){
-        return (*this * arr).sum();
-    }
-};
-*/
 #endif
