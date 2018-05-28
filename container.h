@@ -243,9 +243,17 @@ class ArrayNQ :public SArray<T, lattice::nQ>{
 
 };
 
+// Cartesian vector
 template <class T>
 class ArrayND :public SArray<T, lattice::nD>{
 
+    public:
+
+    using SArray<T,lattice::nD>::operator=;
+
+    T dot(const ArrayND& arr){
+        return (*this * arr).sum();
+    }
 };
 
 #endif
