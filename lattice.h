@@ -4,8 +4,8 @@
 // Choosing the lattice
 #define lattice D2Q9
 
-#include<vector>
 #include<iostream>
+#include "sArray.h"
 
 // D2Q9 lattice namespace
 namespace D2Q9 {
@@ -16,6 +16,10 @@ const int nQ = 9;
 // Lattice dimensions
 const int nD = 2;
 
+typedef SArray<double,nD> doubleND;
+typedef SArray<int,nD> intND;
+typedef SArray<double,nQ> doubleNQ;
+typedef SArray<int,nQ> intNQ;
 // Squared of micro-velocity (c)
 const double cSqr = 1.;
 const double cQad = 1.;
@@ -24,6 +28,11 @@ const double cQad = 1.;
 // In SIMPLB, for the sake of being easily identified, they are called Qvectors.
 // With the indexes of iQ =      0        1        2        3        4
 const int Qvector[nQ][nD]  = {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1},
+
+//                               5        6        7        8
+                              { 1, 1}, {-1, 1}, {-1,-1}, { 1,-1}};
+
+const  SArray<SArray<int,nD>,nQ> Qvector0 =  {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1},
 
 //                               5        6        7        8
                               { 1, 1}, {-1, 1}, {-1,-1}, { 1,-1}};
