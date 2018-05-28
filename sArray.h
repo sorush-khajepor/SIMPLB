@@ -1,3 +1,9 @@
+/* Aliases of SArray types for Cartesian and lattice vectors
+typedef SArray<double,nD> doubleND;
+typedef SArray<int,nD> intND;
+typedef SArray<double,nQ> doubleNQ;
+typedef SArray<int,nQ> intNQ;
+*/
 #ifndef SARRAY_H
 #define SARRAY_H
 
