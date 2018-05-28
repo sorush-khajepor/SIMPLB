@@ -4,7 +4,16 @@ using namespace std;
 
 int main(int argc, char const *argv[]) {
 
-    cout<<lattice::Qvector0;
+    cout<< "Qvector"<<endl;
+    cout<<lattice::Qvector;
 
+    cout<< "iOpposite"<<endl;
+    cout<<lattice::iOpposite;
+
+    cout<< "iHalfQs"<<endl;
+    cout<<lattice::iHalfQs;
+    
+    cout<< "weight"<<endl;
+    cout<<lattice::weight;
     return 0;
 }

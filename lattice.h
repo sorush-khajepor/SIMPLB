@@ -26,16 +26,11 @@ const double cQad = 1.;
 
 // Lattice vectors, which are usually shown by "ei" in the literature.
 // In SIMPLB, for the sake of being easily identified, they are called Qvectors.
-// With the indexes of iQ =      0        1        2        3        4
-const int Qvector[nQ][nD]  = {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1},
+// With the indexes of iQ =                      0        1        2        3        4
+const  SArray<SArray<int,nD>,nQ> Qvector =  {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1},
 
-//                               5        6        7        8
-                              { 1, 1}, {-1, 1}, {-1,-1}, { 1,-1}};
-
-const  SArray<SArray<int,nD>,nQ> Qvector0 =  {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}, { 0,-1},
-
-//                               5        6        7        8
-                              { 1, 1}, {-1, 1}, {-1,-1}, { 1,-1}};
+//                                              5        6        7        8
+                                             { 1, 1}, {-1, 1}, {-1,-1}, { 1,-1}};
 
 /* D2Q9 lattice configuration
 *
@@ -45,14 +40,16 @@ const  SArray<SArray<int,nD>,nQ> Qvector0 =  {{ 0, 0}, { 1, 0}, { 0, 1}, {-1, 0}
 */
 
 // Index of opposite vectors of {0, 1, 2, 3, 4, 5, 6, 7, 8}
-const int iOpposite[nQ] =       {0, 3, 4, 1, 2, 7, 8, 5, 6};
+const SArray<int,nQ> iOpposite = {0, 3, 4, 1, 2, 7, 8, 5, 6};
 
 // Index of half of the lattice vectors
-const int iHalfQs[nQ/2] = {1,2,5,6};
+const SArray<int,nQ/2> iHalfQs = {1,2,5,6};
 
-// Weight of lattice vectors
-const double weight[nQ] = {(double) 4./9.,
-		(double) 1./9., (double) 1./9.,(double) 1./9.,(double) 1./9.,
-		(double) 1./36., (double) 1./36., (double) 1./36., (double) 1./36.};
+// Weight of lattice vectors            0
+const SArray<double,nQ> weight = { 4./9.,
+//                                      1       2       3       4
+                                	   1./9.,  1./9.,  1./9.,  1./9.,
+//                                      5       6       7       8   -
+                                	   1./36., 1./36., 1./36., 1./36.};
 }
 #endif
