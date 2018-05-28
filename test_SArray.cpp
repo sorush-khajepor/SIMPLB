@@ -1,51 +1,51 @@
 #include"sArray.h"
 typedef SArray<double,2> doubleND;
 typedef SArray<int,2> intND;
-
+using namespace std;
 int main() {
 
-    std::cout<<"===========Testing ArrayND=============="<<std::endl;
+    cout<<"===========Testing ArrayND=============="<<endl;
     doubleND c=4.1;
-    std::cout<<"print scalar constructor c "<<std::endl;
-    c.print();
-    std::cout<<"print scalar assignment c"<<std::endl;
+    cout<<"print scalar constructor c "<<endl;
+    cout<<c;
+    cout<<"print scalar assignment c"<<endl;
     c=2.1;
-    c.print();
+    cout<<c;
 
-    std::cout<<"print same type constructor b"<<std::endl;
+    cout<<"print same type constructor b"<<endl;
     doubleND b=c;
-    b.print();
+    cout<<b;
 
-    std::cout<<"print same type assignment m"<<std::endl;
+    cout<<"print same type assignment m"<<endl;
     doubleND m;
     m=b;
-    m.print();
+    cout<<m;
 
-    std::cout<<"print + operator "<<std::endl;
-    (c+2.1).print();
+    cout<<"print + operator "<<endl;
+    cout<<(c+2.1);
 
-    std::cout<<"print sum funtion "<<std::endl;
+    cout<<"print sum funtion "<<endl;
     c = c+2.1;
-    std::cout<<"sum="<<c.sum()<<std::endl;
+    cout<<"sum="<<c.sum()<<endl;
 
-    std::cout<<"print array constructor d"<<std::endl;
+    cout<<"print array constructor d"<<endl;
     double arr[2]={1.5,2.0};
     doubleND d(arr);
-    d.print();
+    cout<<d;
 
-    std::cout<<"print list constructor g"<<std::endl;
+    cout<<"print list constructor g"<<endl;
     intND g={1,2};
-    g.print();
+    cout<<g;
 
-    std::cout<<"print dot product g.d (int=>double)"<<std::endl;
-    std::cout<<d.dot(g)<<std::endl;
+    cout<<"print dot product g.d (int=>double)"<<endl;
+    cout<<d.dot(g)<<endl;
 
-    std::cout<<"print dot product d.g (double=>int)"<<std::endl;
-    std::cout<<g.dot(d)<<std::endl;
+    cout<<"print dot product d.g (double=>int)"<<endl;
+    cout<<g.dot(d)<<endl;
 
-    std::cout<<"print int-double-number, type conversion operation, (doubleND)g*2+d"<<std::endl;
+    cout<<"print int-double-number, type conversion operation, (doubleND)g*2+d"<<endl;
     c = (doubleND)g*2+d;
-    c.print();
+    cout<<c;
 
     return 0;
 }

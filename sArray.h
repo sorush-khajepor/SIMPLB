@@ -120,7 +120,7 @@ public:
         virtual const T sum() const {
                 T s = T();
                 for (int i=0;i<N;i++){
-                    s += data[i];
+                    s = s + data[i];
                 }
                 return s;
         }
@@ -136,10 +136,13 @@ public:
             return data[i];
         }
 
-        virtual void print () {
+
+        friend std::ostream& operator<<(std::ostream& os, const SArray& arr){
             for (int i=0;i<N;i++){
-                std::cout<< "data("<<i<<") = "<<data[i]<< std::endl;
+                os<<std::endl<<"data("<<i<<") = "<<arr[i];
             }
+            os<<std::endl;
+            return os;
         }
 };
 #endif
