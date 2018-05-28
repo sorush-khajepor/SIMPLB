@@ -119,12 +119,17 @@ public:
                 }
                 return arr;
             }
+            
         virtual const T sum() const {
                 T s = T();
                 for (int i=0;i<N;i++){
                     s += data[i];
                 }
                 return s;
+        }
+
+        virtual const T dot(const SArray& arr){
+            return (*this * arr).sum();
         }
 
         T& operator[](const int& i){
@@ -140,7 +145,8 @@ public:
             }
         }
 };
-
+/*
+// Lattice vector
 template <class T>
 class ArrayNQ :public SArray<T, lattice::nQ>{
 
@@ -168,5 +174,5 @@ class ArrayND :public SArray<T, lattice::nD>{
         return (*this * arr).sum();
     }
 };
-
+*/
 #endif

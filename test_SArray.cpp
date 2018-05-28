@@ -1,9 +1,11 @@
 #include"sArray.h"
+typedef SArray<double,2> doubleND;
+typedef SArray<int,2> intND;
 
 int main() {
 
     std::cout<<"===========Testing SArray=============="<<std::endl;
-    SArray<double,3> a;
+    doubleND a;
     a = 1.10;
 
     a.print();
@@ -12,11 +14,11 @@ int main() {
 
     (a*2*a).print();
     std::cout<<"===========Testing ArrayND=============="<<std::endl;
-    ArrayND<double> c=4;
+    doubleND c=4.1;
     std::cout<<"print scalar constructor "<<std::endl;
     c.print();
     std::cout<<"print scalar assignment "<<std::endl;
-    c=2;
+    c=2.1;
     c.print();
 
     std::cout<<"print + operator "<<std::endl;
@@ -28,11 +30,11 @@ int main() {
 
     std::cout<<"print array constructor "<<std::endl;
     double arr[2]={1.5,2.0};
-    ArrayND<double> d(arr);
+    doubleND d(arr);
     d.print();
 
     std::cout<<"print list constructor"<<std::endl;
-    ArrayND<int> g={1,2};
+    intND g={1,2};
     g.print();
 
     std::cout<<"print dot product (int=>double)"<<std::endl;
@@ -42,7 +44,7 @@ int main() {
     std::cout<<g.dot(d)<<std::endl;
 
     std::cout<<"print int-double-number, type conversion operation"<<std::endl;
-    c = (ArrayND<double>)g*2+d;
+    c = (doubleND)g*2+d;
     c.print();
 
     return 0;
