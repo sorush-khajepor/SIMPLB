@@ -141,7 +141,7 @@ public:
             for (int i=0;i<N;i++){
                 os<<std::endl<<"data("<<i<<") = "<<arr[i];
             }
-            os<<std::endl;
+            os<<std::endl<<std::endl;
             return os;
         }
 };
