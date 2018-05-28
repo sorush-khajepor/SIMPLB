@@ -6,11 +6,10 @@ int main() {
     a = 1.10;
 
     a.print();
-
-    SArray<int,3> b;
+    std::cout<<a.sum()<<std::endl;
 
     SArray<int,3>(a).print();
 
-
+    std::cout<<SArray<int,3>(a).sum()<<std::endl;
     return 0;
 }
