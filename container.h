@@ -125,6 +125,15 @@ public:
             *this=rhs;
         }
 
+        template<class U>
+        operator SArray<U,N>()  {
+            SArray<U,N> arr;
+            arr = data;
+//            for (int i=0;i<N;i++){
+ //               arr.data[i] = data[i];
+  //          }
+            return arr;
+        }
         SArray& operator= (const T& rhs){
                 for (int i=0;i<N;i++){
                     data[i] = rhs;
@@ -144,7 +153,6 @@ public:
                     lhs[i]=data[i];
                 }
         }
-
 
         SArray& operator= (const SArray& rhs){
                 for (int i=0;i<N;i++){
