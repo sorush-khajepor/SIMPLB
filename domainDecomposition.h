@@ -48,7 +48,7 @@ class StructuredDecomposition :public DomainDecomposition {
         return dim;
     }
 
-    virtual void computeBlockGeometry(intND& blockOrigin,intND& blockDim,intND& blockCartIndex,intNQ& BlockNeighborIndex){
+    virtual void computeBlockGeometry(intND& blockOrigin,intND& blockDim,intND& blockCartIndex,intNQ& BlockNeighborIndex) const {
 
         blockCartIndex=computeBlockCartIndex(mpiTools.getRank());
 
@@ -65,7 +65,7 @@ class StructuredDecomposition :public DomainDecomposition {
 
     }
     // finding block neighbors
-    intNQ computeNeighborIndex(){
+    intNQ computeNeighborIndex() const {
         intNQ iNei;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
             iNei[iQ]=computeNeighborIndex(iQ);
@@ -73,7 +73,7 @@ class StructuredDecomposition :public DomainDecomposition {
         return iNei;
     }
 
-    intND computePeriodicNeighbor (const intND blockCartIndex, const int& iQ ) {
+    intND computePeriodicNeighbor (const intND blockCartIndex, const int& iQ ) const {
         intND neighborCartIndex;
         for (int iD = 0; iD < lattice::nD; iD++) {
             neighborCartIndex[iD] = (blockCartIndex[iD] + lattice::Qvector[iQ][iD]+nBlock[iD])%nBlock[iD];
@@ -82,7 +82,7 @@ class StructuredDecomposition :public DomainDecomposition {
          return neighborCartIndex;
     }
 
-    int computeNeighborIndex (const int& iQ) {
+    int computeNeighborIndex (const int& iQ) const {
         intND neighborCartIndex;
         intND blockCartIndex=computeBlockCartIndex(mpiTools.getRank());
         bool is_null = false;
@@ -104,7 +104,7 @@ class StructuredDecomposition :public DomainDecomposition {
         }
     }
 
-    int computeBlockSingleIndex (const intND BlockCartIndex) {
+    int computeBlockSingleIndex (const intND BlockCartIndex)const {
             int sum=0;
             for (int j = 0; j < lattice::nD; j++) {
                 int n = BlockCartIndex[j];
@@ -117,7 +117,7 @@ class StructuredDecomposition :public DomainDecomposition {
         }
 
     // compute Cartesian index of a block
-    intND computeBlockCartIndex (const int& blockSingleIndex) {
+    intND computeBlockCartIndex (const int& blockSingleIndex) const {
         intND iXYZ;
         int R = blockSingleIndex;
         for (int j = 0; j < lattice::nD; j++) {
