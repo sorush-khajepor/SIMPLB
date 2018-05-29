@@ -125,6 +125,14 @@ public:
                 return s;
         }
 
+        virtual const T computeVol() const {
+                T v = T(1);
+                for (int i=0;i<N;i++){
+                    v = v * data[i];
+                }
+                return v;
+        }
+
         virtual const T dot(const SArray& arr){
             return (*this * arr).sum();
         }

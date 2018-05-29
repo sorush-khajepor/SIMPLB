@@ -1,6 +1,7 @@
 #include"node.h"
 #include"geometryTools.h"
-#include"container.h"
+
+typedef SArray<LoopLimit,lattice::nQ> LoopLimitNQ;
 
 class Message;
 
@@ -9,10 +10,10 @@ class Block {
 protected:
 
     // Origin of the block (including the ghost layers)
-    int origin[lattice::nD];
+    intND origin;
 
     // Dimensions of the block (including the ghost layers)
-    int dim[lattice::nD];
+    intND dim;
 
     // Volume of the block (surface area in 2D)
     int vol;
@@ -24,22 +25,20 @@ protected:
     Message *message;
 
     // Limits of loops for covering block boundaries (ignoring ghosts)
-    arrayNQ<LoopLimit> boundaryLimit;
+    LoopLimitNQ boundaryLimit;
 
     // Limits of loops for covering block boundaries (including ghosts)
-    arrayNQ<LoopLimit> ghostLimit;
+    LoopLimitNQ ghostLimit;
 
 public:
 
     // Block construction
-    Block(int origin_[], int dim_[]){
+    Block(const intND& origin_, const intND& dim_){
 
         // Initialization of geometry
-	    vol =1;
-        for (int iD=0;iD<lattice::nD;++iD){
-	       origin[iD]=origin_[iD];
-	       dim[iD]=dim_[iD];
-	       vol*=dim_[iD];
+	       origin=origin_;
+	       dim=dim_;
+	       vol=dim_.computeVol();
         }
 
         // Memory allocation for nodes
@@ -56,8 +55,8 @@ public:
     }
 
     // Give access to boundary&Ghost Limit members
-    arrayNQ<LoopLimit>& getBoundaryLimit(){return boundaryLimit;}
-    arrayNQ<LoopLimit>& getGhostLimit(){return ghostLimit;}
+    LoopLimitNQ& getBoundaryLimit(){return boundaryLimit;}
+    LoopLimitNQ& getGhostLimit(){return ghostLimit;}
 
     // Operator () is reserved for accessing nodes
     Node& operator() (const int& iX, const int& iY){
