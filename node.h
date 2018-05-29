@@ -1,73 +1,55 @@
 #include "lattice.h"
 #include <iostream>
-#include <vector>
 using namespace std;
 
 
 class Node {
 
-protected:	
+protected:
 
     // Particle distibution functions (distros)
-    double f[lattice::nQ];
+    doubleNQ* f;
 
 public:
 
     Node() {
-        *this= (double) 0.;
+        f=new doubleNQ (0.);
     }
 
+    doubleNQ& getF() {return *f;}
+    const doubleNQ& getF() const {return *f;}
+
     // Read-Write access
-    double& operator[] (const int& q){return f[q];}
+    double& operator[] (const int& q){return (*f)[q];}
 
     // Read-Only access
-    double const& operator[] (const int& q) const {return f[q];}
+    double const& operator[] (const int& q) const {return (*f)[q];}
 
     // Set all distros to a number
     Node& operator= (const double& rhs){
-        for (int iQ=0;iQ<lattice::nQ;iQ++){
-            f[iQ] = rhs;
-        }
+        *f=rhs;
     }
 
     Node& operator= (const double rhs[]){
-        for (int iQ=0;iQ<lattice::nQ;iQ++){
-            f[iQ] = rhs[iQ];
-        }
+        *f=rhs;
     }
 
     // Set node with another node
     Node& operator= (const Node& rhs){
-
-        for (int iQ=0;iQ<lattice::nQ;iQ++){
-            f[iQ] = rhs.f[iQ];
-        }
+            *f = *(rhs.f);
     }
 
-
-/*
-    // Set node with arrayNQ
-    Node& operator= (const arrayNQ<double>& rhs){
-        for (int iQ=0;iQ<lattice::nQ;iQ++){
-            f[iQ] = rhs[iQ];
-        }
-    }
-*/
 
     void mirror () {
-        int iQ;
         for (int i=0;i<lattice::nQ/2;++i){
-            iQ = lattice::iHalfQs[i];
-            std::swap(f[iQ],f[lattice::iOpposite[iQ]]);
+            int iQ = lattice::iHalfQs[i];
+            std::swap((*f)[iQ],(*f)[lattice::iOpposite[iQ]]);
         }
     }
 
 
-    void print () {
-        for (int iQ=0;iQ<lattice::nQ;iQ++){
-            cout<< "f("<<iQ<<") = "<<f[iQ]<< endl;
-        }
+    friend std::ostream& operator<<(std::ostream& os, const Node& node){
+        cout<<*(node.f);
+        return os;
     }
-
 };
-
