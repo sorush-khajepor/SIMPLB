@@ -11,6 +11,8 @@ class DomainDecomposition{
 class StructuredDecomposition :public DomainDecomposition {
 
     protected:
+    // Origin is placed on (1,1[,1])
+    const intND origin=1;
     // Raw whole domain dimensions (before considering ghosts)
     intND dim;
     // Number of Blocks in the wholde domain  along each (X-Y-Z) direction
@@ -46,7 +48,7 @@ class StructuredDecomposition :public DomainDecomposition {
         return dim;
     }
 
-    virtual void computeBlockGeometry(intND blockOrigin,intND blockDim,intND blockCartIndex,intNQ BlockNeighborIndex){
+    virtual void computeBlockGeometry(intND& blockOrigin,intND& blockDim,intND& blockCartIndex,intNQ& BlockNeighborIndex){
 
         blockCartIndex=computeBlockCartIndex(mpiTools.getRank());
 
@@ -55,16 +57,21 @@ class StructuredDecomposition :public DomainDecomposition {
             // Dimension of the block along XYZ axes including 2 ghost layers
             blockDim[iD]= (dim[iD]+nBlock[iD]-blockCartIndex[iD] -1)/nBlock[iD]+2;
             // Origin of the block starts from the ghost layer.
-            blockOrigin[iD] = dim[iD]/nBlock[iD]*blockCartIndex[iD]+std::min(blockCartIndex[iD],remainder)-1;
+            blockOrigin[iD] = dim[iD]/nBlock[iD]*blockCartIndex[iD]+std::min(blockCartIndex[iD],remainder)-1 + origin[iD];
         }
 
-        // Setting block neighbors
-        for (int iQ=0;iQ<lattice::nQ;++iQ){
-            BlockNeighborIndex[iQ]=computeNeighborIndex(iQ);
-        }
-    
+
+        BlockNeighborIndex=computeNeighborIndex();
+
     }
-
+    // finding block neighbors
+    intNQ computeNeighborIndex(){
+        intNQ iNei;
+        for (int iQ=0;iQ<lattice::nQ;++iQ){
+            iNei[iQ]=computeNeighborIndex(iQ);
+        }
+        return iNei;
+    }
 
     intND computePeriodicNeighbor (const intND blockCartIndex, const int& iQ ) {
         intND neighborCartIndex;
