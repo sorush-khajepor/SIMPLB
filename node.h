@@ -10,6 +10,9 @@ protected:
     // Particle distibution functions (distros)
     doubleNQ* f;
 
+    // Node Collision
+    // Collision* collision;
+
 public:
 
     Node() {
