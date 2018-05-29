@@ -1,5 +1,6 @@
 #include"node.h"
 #include"geometryTools.h"
+#include "domainDecomposition.h"
 
 typedef SArray<LoopLimit,lattice::nQ> LoopLimitNQ;
 
@@ -8,6 +9,9 @@ class Message;
 class Block {
 
 protected:
+
+    // Cartesian index of the block
+    intND cartIndex;
 
     // Origin of the block (including the ghost layers)
     intND origin;
@@ -33,27 +37,7 @@ protected:
 public:
 
     // Block construction
-    Block(const intND& origin_, const intND& dim_){
-
-        // Initialization of geometry
-	       origin=origin_;
-
-	       dim=dim_;
-	       vol=dim_.computeVol();
-        }
-
-        // Memory allocation for nodes
-        nodes = new Node[vol];
-
-	    // Set loop limits for actual and ghost  boundaries
-        setBoundaryLimit();
-        setGhostLimit();
-
-        //TODO Set message
-        //message = new Message (boundaryLimit,ghostLimit,neighbor);
-
-
-    }
+    Block(const StructuredDecomposition& sd);
 
     // Give access to boundary&Ghost Limit members
     LoopLimitNQ& getBoundaryLimit(){return boundaryLimit;}
@@ -176,7 +160,7 @@ public:
                 iYend=2;
             }
 
-            boundaryLimit[iQ].set(iXbegin,iYbegin,iXend,iYend);
+            boundaryLimit[iQ]={{iXbegin,iYbegin},{iXend,iYend}};
         }
     }
 
@@ -210,7 +194,7 @@ public:
                 iYend=1;
             }
 
-            ghostLimit[iQ].set(iXbegin,iYbegin,iXend,iYend);
+            ghostLimit[iQ]={{iXbegin,iYbegin},{iXend,iYend}};
 
         }
     }
