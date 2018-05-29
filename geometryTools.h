@@ -6,26 +6,36 @@ using namespace std;
 class TwoPoints{
 
     protected:
-    int point0[lattice::nD];
-    int point1[lattice::nD];
+    intND point0;
+    intND point1;
 
     public:
+
     TwoPoints(){
-       for (int iD=0;iD<lattice::nD;++iD){
-           point0[iD]=0;
-           point1[iD] = 0;
-       }
+           point0=0;
+           point1=0;
+    }
+
+    TwoPoints(const intND& point0_, const intND& point1_){
+        set(point0_,point1_);
     }
 
     TwoPoints(const int& iX0,const int& iY0,const int& iX1,const int& iY1){
       set(iX0,iY0,iX1,iY1);
     }
 
+    TwoPoints(const int& iX0,const int& iY0,const int& iZ0,const int& iX1,const int& iY1,const int& iZ1 ){
+      set(iX0,iY0,iZ0,iX1,iY1,iZ1);
+    }
+
     TwoPoints& operator=(const TwoPoints& rhs){
-        for (int iD=0;iD<lattice::nD;iD++){
-            point0[iD]=rhs.point0[iD];
-            point1[iD]=rhs.point1[iD];
-        }
+            point0=rhs.point0;
+            point1=rhs.point1;
+    }
+
+    void set (const intND& point0_, const intND& point1_){
+            point0=point0_;
+            point1=point1_;
     }
 
     // Setting 2D points
@@ -37,9 +47,6 @@ class TwoPoints{
        point1[1] = iY1;
     }
 
-    TwoPoints(const int& iX0,const int& iY0,const int& iZ0,const int& iX1,const int& iY1,const int& iZ1 ){
-      set(iX0,iY0,iZ0,iX1,iY1,iZ1);
-    }
     // Setting 3D points
     void set (const int& iX0,const int& iY0,const int& iZ0,const int& iX1,const int& iY1,const int& iZ1){
        point0[0]=iX0;
