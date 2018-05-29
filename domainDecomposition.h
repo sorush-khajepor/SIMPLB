@@ -38,6 +38,13 @@ class StructuredDecomposition :public DomainDecomposition {
     const intND& getNBlock() const{
         return nBlock;
     }
+    const int& getDim(const int& iD) const{
+            return dim[iD];
+        }
+
+    const intND& getDim() const{
+        return dim;
+    }
 
     virtual void computeBlockGeometry(intND blockOrigin,intND blockDim,intND blockCartIndex,intNQ BlockNeighborIndex){
 
@@ -60,8 +67,12 @@ class StructuredDecomposition :public DomainDecomposition {
 
 
     intND computePeriodicNeighbor (const intND blockCartIndex, const int& iQ ) {
+        intND neighborCartIndex;
+        for (int iD = 0; iD < lattice::nD; iD++) {
+            neighborCartIndex[iD] = (blockCartIndex[iD] + lattice::Qvector[iQ][iD]+nBlock[iD])%nBlock[iD];
+        }
 
-         return (blockCartIndex + lattice::Qvector[iQ]+nBlock)%nBlock;
+         return neighborCartIndex;
     }
 
     int computeNeighborIndex (const int& iQ) {
