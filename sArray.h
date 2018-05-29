@@ -20,6 +20,7 @@ public:
         SArray(const T rhs){
             *this=rhs;
         }
+
         SArray(std::initializer_list<T> rhs) {
           std::copy(rhs.begin(), rhs.end(), data);
         }

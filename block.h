@@ -37,6 +37,7 @@ public:
 
         // Initialization of geometry
 	       origin=origin_;
+
 	       dim=dim_;
 	       vol=dim_.computeVol();
         }

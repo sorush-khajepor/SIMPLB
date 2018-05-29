@@ -1,109 +1,96 @@
-#include <iostream>
 #include "lattice.h"
-using namespace std;
+#include <iostream>
 
 
-class TwoPoints{
+class Box {
+    intND origin;
+    intND dim;
 
-    protected:
-    intND point0;
-    intND point1;
-
-    public:
-
-    TwoPoints(){
-           point0=0;
-           point1=0;
-    }
-
-    TwoPoints(const intND& point0_, const intND& point1_){
-        set(point0_,point1_);
-    }
-
-    TwoPoints(const int& iX0,const int& iY0,const int& iX1,const int& iY1){
-      set(iX0,iY0,iX1,iY1);
-    }
-
-    TwoPoints(const int& iX0,const int& iY0,const int& iZ0,const int& iX1,const int& iY1,const int& iZ1 ){
-      set(iX0,iY0,iZ0,iX1,iY1,iZ1);
-    }
-
-    TwoPoints& operator=(const TwoPoints& rhs){
-            point0=rhs.point0;
-            point1=rhs.point1;
-    }
-
-    void set (const intND& point0_, const intND& point1_){
-            point0=point0_;
-            point1=point1_;
-    }
-
-    // Setting 2D points
-    void set (const int& iX0,const int& iY0,const int& iX1,const int& iY1){
-       point0[0]=iX0;
-       point0[1]=iY0;
-
-       point1[0] = iX1;
-       point1[1] = iY1;
-    }
-
-    // Setting 3D points
-    void set (const int& iX0,const int& iY0,const int& iZ0,const int& iX1,const int& iY1,const int& iZ1){
-       point0[0]=iX0;
-       point0[1]=iY0;
-       point0[2]=iZ0;
-
-       point1[0] = iX1;
-       point1[1] = iY1;
-       point1[2] = iZ1;
-    }
-    
-};
-
-class Box :public TwoPoints{
 	public:
+
+    Box(){
+        origin =0;
+        dim =0;
+    }
+
+    Box(const intND& origin_, const intND& dim_): origin(origin_),dim(dim_){};
+
+    Box& operator=(const Box& rhs){
+            origin=rhs.origin;
+            dim=rhs.dim;
+    }
+
+    Box(std::initializer_list<int> origin_,std::initializer_list<int> dim_) {
+
+        origin=origin_;
+        dim = dim_;
+    }
+
 	// Get origin of of the box
-	const int& getOrigin(const int& iD) const {return point0[iD];}
+	const intND& getOrigin() const {return origin;}
+	const int& getOrigin(const int& iD) const {return origin[iD];}
+
 	// Get dimensions of the box     	
-	const int& getDim(const int& iD) const {return point1[iD];}
+	const intND& getDim() const {return dim;}
+	const int& getDim(const int& iD) const {return dim[iD];}
+
    	// Volume in 2D is surface area of the box
-   	int getVol(){
-        	int vol=1;
-        	for (int iD=0;iD<lattice::nD;++iD){
-            	vol*=getDim(iD);
-        }
-        return vol;
+   	int computeVol(){
+         return	dim.computeVol();
 	}
-	void print(){
-	for (int iD=0;iD<lattice::nD;++iD){
-	    cout<<" Axis="<<iD<<" Origin ="<<getOrigin(iD)<<" Dimension="<<getDim(iD)<<endl;
-	}
-	cout<<" Volume="<<getVol()<<endl;
-	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Box& box){
+	            std::cout<<"origin = "<<box.origin;
+	            std::cout<<"dimension ="<<box.dim;
+	            return os;
+	        }
 };
 
-class LoopLimit :public TwoPoints{
+class LoopLimit {
+    intND begin;
+    intND end;
+
 	public:
-    	// Begining of the loop over the box, or box origin
-	const int& getBegin(const int& iD)const {return point0[iD];}
+
+    LoopLimit(){
+        begin =0;
+        end =0;
+    }
+
+    LoopLimit(const intND& begin_, const intND& end_): begin(begin_),end(end_){};
+
+    LoopLimit& operator=(const LoopLimit& rhs){
+            begin=rhs.begin;
+            end=rhs.end;
+    }
+
+    LoopLimit(std::initializer_list<int> begin_,std::initializer_list<int> end_) {
+
+        begin=begin_;
+        end=end_;
+    }
+
+    // Begining of the loop over the box, or box origin
+	const intND& getBegin()const {return begin;}
+	const int& getBegin(const int& iD)const {return begin[iD];}
+
 	// End of the loop over the box
-	const int& getEnd  (const int& iD)const {return point1[iD];}
-	// Get length of a dimension
-	int getDim(const int& iD){return point1[iD]-point0[iD];}
-   	// Volume in 2D is surface area of the box
-   	int getVol(){
-        	int vol=1;
-        	for (int iD=0;iD<lattice::nD;++iD){
-            	vol*=getDim(iD);
-        	}
-        	return vol;
+	const intND& getEnd()const {return end;}
+	const int& getEnd  (const int& iD)const {return end[iD];}
+
+	// compute length of a dimension
+	intND computeDim(){return end-begin;}
+	int computeDim(const int& iD){return end[iD]-begin[iD];}
+
+   	// Volume in 2D is surface area
+   	int computeVol(){
+            	return computeDim().computeVol();
 	}
-	void print(){
-	for (int iD=0;iD<lattice::nD;++iD){
-	    cout<<"Axis="<<iD<<" Begin ="<<point0[iD]<<" End ="<<point1[iD]<<" Length="<<getDim(iD)<<endl;
-	}
-	cout<<" Volume="<<getVol()<<endl;
-	}
+	friend std::ostream& operator<<(std::ostream& os, const LoopLimit& loopLimit){
+	            std::cout<<"origin = "<<loopLimit.begin;
+	            std::cout<<"dimension ="<<loopLimit.end;
+	            return os;
+	        }
 };
 
 int getDotProduct(const int vec1[],const int vec2[]){
