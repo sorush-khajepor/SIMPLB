@@ -118,6 +118,21 @@ public:
                 return arr;
             }
 
+        virtual SArray operator% (const SArray& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] % rhs.data[i];
+                }
+                return arr;
+            }
+
+        virtual SArray operator% (const T& rhs) const {
+                SArray arr;
+                for (int i=0;i<N;i++){
+                    arr.data[i] = this->data[i] % rhs;
+                }
+                return arr;
+            }
         virtual const T sum() const {
                 T s = T();
                 for (int i=0;i<N;i++){
