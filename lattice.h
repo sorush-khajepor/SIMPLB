@@ -51,8 +51,12 @@ const SArray<double,nQ> weight = { 4./9.,
 
 // Aliases of SArray types for Cartesian and lattice vectors
 typedef SArray<double,lattice::nD> doubleND;
-typedef SArray<int,lattice::nD> intND;
 typedef SArray<double,lattice::nQ> doubleNQ;
+
+typedef SArray<int,lattice::nD> intND;
 typedef SArray<int,lattice::nQ> intNQ;
+
+typedef SArray<bool,lattice::nQ> boolNQ;
+typedef SArray<bool,lattice::nD> boolND;
 
 #endif
