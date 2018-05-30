@@ -8,7 +8,7 @@ int main() {
     doubleND c=4.1;
     cout<<"print scalar constructor c "<<endl;
     cout<<c;
-    cout<<"print scalar assignment c"<<endl;
+    cout<<"print scalar assignment c=2.1"<<endl;
     c=2.1;
     cout<<c;
 
@@ -21,7 +21,7 @@ int main() {
     m=b;
     cout<<m;
 
-    cout<<"print + operator "<<endl;
+    cout<<"print + operator c+2.1"<<endl;
     cout<<(c+2.1);
 
     cout<<"print sum funtion "<<endl;
