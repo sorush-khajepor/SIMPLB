@@ -1,7 +1,6 @@
 #include "block.hh"
 
 int main(int argc, char const *argv[]) {
-
     intND dim={16,16};
     boolND periodic={false,true};
 
@@ -9,5 +8,6 @@ int main(int argc, char const *argv[]) {
 
     Block block(structuredDecomposition);
 
+
     return 0;
-}
+};

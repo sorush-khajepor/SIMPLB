@@ -11,7 +11,7 @@ protected:
 
 public:
         SArrayBase(){
-            *this=0.;
+            *this=T();
         }
         SArrayBase(const T rhs[]){
             *this=rhs;
@@ -60,13 +60,7 @@ public:
                 }
                 return *this;
             }
-        virtual SArrayBase operator+ (const SArrayBase& rhs) const {
-                SArrayBase arr;
-                for (int i=0;i<N;i++){
-                    arr.data[i] = this->data[i] + rhs.data[i];
-                }
-                return arr;
-            }
+
 
         T& operator[](const int& i){
             return data[i];

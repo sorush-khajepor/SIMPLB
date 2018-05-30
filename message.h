@@ -2,6 +2,8 @@
 #include "mpiTools.h"
 #include "block.h"
 #include <vector>
+
+
 class Message{
 
     // Neighbor blocks (or MPI processes) in the directions of Qvectors in the MPI world.
@@ -9,10 +11,10 @@ class Message{
     intNQ neighbor;
 
     // Boundary send buffer, including nQ boundaries. Each is a vector of distros.
-    SArray<std::vector<doubleNQ>,lattice::nQ> boundarySendBuffer;
+    SArrayBase<std::vector<doubleNQ>,lattice::nQ> boundarySendBuffer;
 
     // Boundary receive buffer, exactly the same length as send buffer.
-    SArray<std::vector<doubleNQ>,lattice::nQ> boundaryRecvBuffer;
+    SArrayBase<std::vector<doubleNQ>,lattice::nQ> boundaryRecvBuffer;
 
     // Limits of loops for send buffer (ignoring ghosts and non-interacting neighbors)
     LoopLimitNQ sendLimit;
@@ -77,7 +79,7 @@ public:
 
 
         // MPI Send
-        SArray<MPI_Request,lattice::nQ> req;
+        SArrayBase<MPI_Request,lattice::nQ> req;
         // Loop over different boundaries
         for (int iQ=1;iQ<lattice::nQ;++iQ){
             int length = sendLimit[iQ].computeVol();
@@ -89,7 +91,7 @@ public:
     void receive(Block& block){
 
         // MPI Receive buffer
-        SArray<MPI_Status,lattice::nQ> status;
+        SArrayBase<MPI_Status,lattice::nQ> status;
         for (int iQ=1;iQ<lattice::nQ;++iQ){
             int iOp = lattice::iOpposite[iQ];
             int length = recvLimit[iQ].computeVol();
