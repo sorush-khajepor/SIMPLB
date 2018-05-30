@@ -4,6 +4,10 @@
 
 //////////// BGK Collision /////////////
 
+collisionBGK::collisionBGK(const double& omega_){
+	omega = omega_;
+};
+
 void collisionBGK::collide(Node& node){
     double Rho,Usqr;
     double U[lattice::nD];
@@ -68,6 +72,10 @@ void collisionBGK::calc1stMoment(const Node& node, double moment[]){
 
 //////////// BGK Collision with Forcing /////////////
 
+collisionForcedBGK::collisionForcedBGK(const double& omega_, double force){
+	omega = omega_;
+};
+
 void collisionForcedBGK::collide(Node& node){
     double Rho,Usqr;
     double U[lattice::nD];
@@ -95,17 +103,66 @@ void collisionForcedBGK::calcRho_U(const Node& node,double& Rho, double U[]){
 
 //////////// Standard Bounce-Back /////////////
 
+bounceBack::bounceBack(const double& omega_){
+	omega = omega_;
+};
+
 void bounceBack::collide(Node& node){
 	node.mirror();
 }
 
-//////////// Zou-He Boundary Condition /////////////
+//////////// Zou-He Boundary Conditions /////////////
 
-void ZouHeCollisionBottom::collide(Node& node){
+//////////// Top /////////////
 
+ZouHeCollisionTop::ZouHeCollisionTop(const double& omega_, double& force, double& u){
+	omega = omega_;
+};
+
+void ZouHeCollisionTop::collide(Node& node){
+    double Usqr;
+	double Rho;
+    ZouHeCollisionTop::getMissingDistros(node,Rho);
+    calcRho_U(node,Rho,u);
+    Usqr = getUsqr(u);
+    for(int iQ=0;iQ<lattice::nQ;++iQ){
+        node[iQ] = (1. - omega)*node[iQ] + omega*getFeq(iQ,Rho,Usqr,u);
+    }
 }
 
-double ZouHeCollisionBottom::getRho(const Node& node){
+double ZouHeCollisionTop::getZHRho(const Node& node){
+    double Rho = 0.;
+    int norm[2] = {0,1};
+    Rho = (2.*(Node[0]+Node[1]+Node[3])+4.*(Node[2]+Node[5]+Node[6])+(getDotProduct(norm,force)))/2.*(1.+(getDotProduct(norm,u)));
+    }
+    return Rho;
+}
+
+void ZouHeCollisionTop::getMissingDistros(Node& node, double& Rho){
+	Rho = getZHRho(node);
+	Node[4] = (Node[2]-2.*(Rho*u[1])/3.);
+	Node[7] = (Node[5]-(Rho*u[1])/6.-(Rho*u[0])/2.+(Node[3]-Node[1])/2.-(-force[0]-force[1])/4.); //TODO check equ's
+	Node[8] = (Node[6]-(Rho*u[1])/6.+(Rho*u[0])/2.+(Node[1]-Node[3])/2.-(force[0]-force[1])/4.);
+}
+
+//////////// Bottom /////////////
+
+ZouHeCollisionBottom::ZouHeCollisionBottom(const double& omega_, double& force, double& u){
+	omega = omega_;
+};
+
+void ZouHeCollisionBottom::collide(Node& node){
+	double Usqr;
+	double Rho;
+	ZouHeCollisionBottom::getMissingDistros(node,Rho);
+	calcRho_U(node,Rho,u);
+	Usqr = getUsqr(u);
+	for(int iQ=0;iQ<lattice::nQ;++iQ){
+	    node[iQ] = (1. - omega)*node[iQ] + omega*getFeq(iQ,Rho,Usqr,u);
+	}
+}
+
+double ZouHeCollisionBottom::getZHRho(const Node& node){
     double Rho = 0.;
     int norm[2] = {0,-1};
     Rho = (2.*(Node[0]+Node[1]+Node[3])+4.*(Node[4]+Node[7]+Node[8])+(getDotProduct(norm,force)))/2.*(1.+(getDotProduct(norm,u)));
