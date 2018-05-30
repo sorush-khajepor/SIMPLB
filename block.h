@@ -5,7 +5,7 @@
 #include"geometryTools.h"
 #include "domainDecomposition.h"
 
-typedef SArray<LoopLimit,lattice::nQ> LoopLimitNQ;
+typedef SArrayBase<LoopLimit,lattice::nQ> LoopLimitNQ;
 
 class Message;
 
