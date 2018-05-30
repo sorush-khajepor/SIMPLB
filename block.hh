@@ -1,4 +1,5 @@
 #include "block.h"
+#include "message.h"
 
 // Block construction
 Block::Block(const StructuredDecomposition& sd){
@@ -17,5 +18,5 @@ Block::Block(const StructuredDecomposition& sd){
     setGhostLimit();
 
     //TODO Set message
-    //message = new Message (boundaryLimit,ghostLimit,BlockNeighborIndex);
+    message = new Message (boundaryLimit,ghostLimit,BlockNeighborIndex);
 }
