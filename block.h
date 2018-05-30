@@ -1,3 +1,6 @@
+#ifndef BLOCK_H
+#define BLOCK_H
+
 #include"node.h"
 #include"geometryTools.h"
 #include "domainDecomposition.h"
@@ -199,3 +202,4 @@ public:
         }
     }
 };
+#endif
