@@ -17,6 +17,6 @@ Block::Block(const StructuredDecomposition& sd){
     setBoundaryLimit();
     setGhostLimit();
 
-    //TODO Set message
+    // Set message
     message = new Message (boundaryLimit,ghostLimit,BlockNeighborIndex);
 }
