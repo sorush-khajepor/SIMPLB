@@ -4,12 +4,15 @@ int main(int argc, char const *argv[]) {
     Node n,m;
 
     cout<<"Set to something n:";
-    n = 9.;
     n[0]=0;
     n[1]=1;
     n[2]=2;
+    n[3]=3;
+    n[4]=4;
     n[5]=5;
     n[6]=6;
+    n[7]=7;
+    n[8]=8;
 
     cout<<n;
 
