@@ -24,6 +24,8 @@ class Message{
 
 public:
 
+    LoopLimitNQ getSendLimit() {return sendLimit;}
+    LoopLimitNQ getRecvLimit() {return recvLimit;}
     // Construction
     Message(LoopLimitNQ& blockBoundaryLimit,LoopLimitNQ& blockGhostLimit, const intNQ& neighbor_){
 
