@@ -201,5 +201,15 @@ public:
 
         }
     }
+    friend std::ostream& operator<<(std::ostream& os, const Block& block){
+        os<<"Cartesian Index = "<<block.cartIndex;
+        os<<"Origin = "<<block.origin;
+        os<<"Dimensions = "<<block.dim;
+        os<<"Volume = "<<block.vol<<endl;
+    //    os<<"boundaryLimit = "<<block.boundaryLimit;
+//        os<<"ghostLimit = "<< block.ghostLimit;
+        os<<std::endl<<std::endl;
+        return os;
+    }
 };
 #endif
