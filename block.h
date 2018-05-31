@@ -41,7 +41,7 @@ public:
 
     // Block construction
     Block(const StructuredDecomposition& sd);
-
+    Message& getMessage(){return *message;}
     // Give access to boundary&Ghost Limit members
     LoopLimitNQ& getBoundaryLimit(){return boundaryLimit;}
     LoopLimitNQ& getGhostLimit(){return ghostLimit;}
