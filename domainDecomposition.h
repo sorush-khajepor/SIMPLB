@@ -15,9 +15,9 @@ class StructuredDecomposition :public DomainDecomposition {
     const intND origin=1;
     // Raw whole domain dimensions (before considering ghosts)
     intND dim;
-    // Number of Blocks in the wholde domain  along each (X-Y-Z) direction
+    // Number of Blocks in the whole domain along each (X-Y-Z) direction
     intND nBlock;
-    // Shows the periodicity of domain along cartesian(X-Y-Z) axes
+    // Shows the periodicity of domain along Cartesian (X-Y-Z) axes
     boolND periodic;
 
     public:
@@ -64,7 +64,7 @@ class StructuredDecomposition :public DomainDecomposition {
         BlockNeighborIndex=computeNeighborIndex();
 
     }
-    // finding block neighbors
+    // Finding block neighbors
     intNQ computeNeighborIndex() const {
         intNQ iNei;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
@@ -116,7 +116,7 @@ class StructuredDecomposition :public DomainDecomposition {
             return sum;
         }
 
-    // compute Cartesian index of a block
+    // Compute Cartesian index of a block
     intND computeBlockCartIndex (const int& blockSingleIndex) const {
         intND iXYZ;
         int R = blockSingleIndex;

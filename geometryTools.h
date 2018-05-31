@@ -34,7 +34,7 @@ class Box {
 	const intND& getDim() const {return dim;}
 	const int& getDim(const int& iD) const {return dim[iD];}
 
-   	// Volume in 2D is surface area of the box
+   	// Compute volume (in 2D volume is surface area of the box)
    	int computeVol(){
          return	dim.computeVol();
 	}
@@ -70,7 +70,7 @@ class LoopLimit {
         end=end_;
     }
 
-    // Begining of the loop over the box, or box origin
+    // Beginning of the loop over the box, or box origin
 	const intND& getBegin()const {return begin;}
 	const int& getBegin(const int& iD)const {return begin[iD];}
 
@@ -78,11 +78,11 @@ class LoopLimit {
 	const intND& getEnd()const {return end;}
 	const int& getEnd  (const int& iD)const {return end[iD];}
 
-	// compute length of a dimension
+	// Compute length of a dimension
 	intND computeDim(){return end-begin;}
 	int computeDim(const int& iD){return end[iD]-begin[iD];}
 
-   	// Volume in 2D is surface area
+   	// Compute volume (in 2D volume is surface area)
    	int computeVol(){
             	return computeDim().computeVol();
 	}
@@ -93,6 +93,8 @@ class LoopLimit {
 	        }
 };
 
+// Get dot product of two vectors (i.e. a.b = a1b1 + a2b2 + ... + anbn)
+// Dot product of two integers = integer
 int getDotProduct(const int vec1[],const int vec2[]){
 	int sum=0.;
 	for (int iD=0;iD<lattice::nD;++iD){
@@ -100,7 +102,7 @@ int getDotProduct(const int vec1[],const int vec2[]){
 	}
 	return sum;
 }
-
+// Dot product of two floating point vectors = double
 double getDotProduct(const double vec1[],const double vec2[]){
 	double sum=0.;
 	for (int iD=0;iD<lattice::nD;++iD){
@@ -108,7 +110,8 @@ double getDotProduct(const double vec1[],const double vec2[]){
 	}
 	return sum;
 }
-
+// Dot product of integer and floating point vectors = double
+// Note: take care with order of int and double
 double getDotProduct(const int vec1[],const double vec2[]){
 	double sum=0.;
 	for (int iD=0;iD<lattice::nD;++iD){

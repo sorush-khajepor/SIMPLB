@@ -43,8 +43,8 @@ public:
         }
 
         // set send&receive buffer
-        // boundaries start from iQ = 1. Because borderlimit[iQ=0] gives whole domain.
-        // note, computeVol() for sendLimit is equal to recvLimit. But they have different begining and end.
+        // Boundaries start from iQ = 1. because borderlimit[iQ=0] gives whole domain.
+        // Note, computeVol() for sendLimit is equal to recvLimit. But they have different beginning and end.
         for (int iQ=1;iQ<lattice::nQ;++iQ){
 
             int length = sendLimit[iQ].computeVol();
