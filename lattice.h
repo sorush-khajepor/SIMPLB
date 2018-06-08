@@ -47,6 +47,8 @@ const SArray<double,nQ> weight = { 4./9.,
                                 	   1./9.,  1./9.,  1./9.,  1./9.,
 //                                      5       6       7       8   -
                                 	   1./36., 1./36., 1./36., 1./36.};
+// Unit Cartesian vectors
+const  SArray<SArray<int,nD>,nD> unitVector =  {{ 0, 1}, { 1, 0}};
 }
 
 // Aliases of SArray types for Cartesian and lattice vectors
