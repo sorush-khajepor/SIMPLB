@@ -31,7 +31,9 @@ if (mpiTools.getRank()==0){
         std::cout <<"boundary = "<<iQ<<endl;
         for (auto i=v1.begin();i!=v1.end();i++){
             std::cout<<"  iOutHalfQs = " << *i <<'\n';
-
+        }
+        for (auto i=v2.begin();i!=v2.end();i++){
+            std::cout<<"  iNotOutHalfQs = " << *i <<'\n';
         }
     }
 }
