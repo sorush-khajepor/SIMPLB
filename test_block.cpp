@@ -22,8 +22,19 @@ int main(int argc, char const *argv[]) {
 
 //if (mpiTools.getRank()==4) std::cout << "recvLimit = " << block.getMessage().getRecvLimit()<<'\n';
 
-    cout<<"~~~~~~~~~~~~~~Block Neighbors for rank = "<<mpiTools.getRank()<<"~~~~~~~~~~~"<<endl<<block.getMessage().getNeighbor();
+//    cout<<"~~~~~~~~~~~~~~Block Neighbors for rank = "<<mpiTools.getRank()<<"~~~~~~~~~~~"<<endl<<block.getMessage().getNeighbor();
 
+if (mpiTools.getRank()==0){
+    for (int iQ=0;iQ<lattice::nQ;iQ++){
+        vector<int> v1 = block.getMessage().getIOutHalfQs()[iQ];
+        vector<int> v2 = block.getMessage().getINotOutHalfQs()[iQ];
+        std::cout <<"boundary = "<<iQ<<endl;
+        for (auto i=v1.begin();i!=v1.end();i++){
+            std::cout<<"  iOutHalfQs = " << *i <<'\n';
+
+        }
+    }
+}
     MPI_Finalize();
     return 0;
 };
