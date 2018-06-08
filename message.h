@@ -18,10 +18,10 @@ class Message{
     SArrayBase<std::vector<doubleNQ>,lattice::nQ> boundaryRecvBuffer;
 
     // Index of halfQs which go out of the Qth boundary
-    SArrayBase<std::vector<doubleNQ>,lattice::nQ> iOutHalfQs;
+    SArrayBase<std::vector<int>,lattice::nQ> iOutHalfQs;
 
     // Index of halfQs which don't go out (tangent or in-ward) of the Qth boundary
-    SArrayBase<std::vector<doubleNQ>,lattice::nQ> iNotOutHalfQs;
+    SArrayBase<std::vector<int>,lattice::nQ> iNotOutHalfQs;
 
     // Limits of loops for send buffer (ignoring ghosts and non-interacting neighbors)
     LoopLimitNQ sendLimit;
@@ -34,8 +34,8 @@ public:
     LoopLimitNQ getSendLimit() {return sendLimit;}
     LoopLimitNQ getRecvLimit() {return recvLimit;}
 
-    SArrayBase<std::vector<doubleNQ>,lattice::nQ> getINotOutHalfQs() const{return iNotOutHalfQs;}
-    SArrayBase<std::vector<doubleNQ>,lattice::nQ> getIOutHalfQs() const{return iOutHalfQs;}
+    SArrayBase<std::vector<int>,lattice::nQ> getINotOutHalfQs() const{return iNotOutHalfQs;}
+    SArrayBase<std::vector<int>,lattice::nQ> getIOutHalfQs() const{return iOutHalfQs;}
 
     // Construction
     Message(LoopLimitNQ& blockBoundaryLimit,LoopLimitNQ& blockGhostLimit, const intNQ& neighbor_){
