@@ -3,6 +3,7 @@
 #include "block.h"
 #include <vector>
 
+using namespace lattice;
 
 class Message{
 
@@ -61,18 +62,23 @@ public:
             }
         }
 
-         for (int iBoundary=1;iBoundary<lattice::nQ;iBoundary++){
-            for (int i=0;i<lattice::nQ/2;i++){
-                if (lattice::Qvector[lattice::iHlafQs[i]].dot(lattice::Qvector[iboundary])> 0) {
+        for (int iBoundary=0;iBoundary<nQ;iBoundary++){
 
-                    iOutHalfQs[iBoundary].push_back(lattice::iHlafQs[i])
+            intND Xb = unitVector[0]*(Qvector[iBoundary].dot(unitVector[0]));
+            intND Yb = unitVector[1]*(Qvector[iBoundary].dot(unitVector[1]));
 
-                }else if {
+            for (int i=0;i<nQ/2;i++){
 
-                    iNotOutHalfQs[iBoundary].push_back(lattice::iHlafQs[i])
+                if (Qvector[iHalfQs[i]].dot(Xb)> 0 or Qvector[iHalfQs[i]].dot(Yb)> 0) {
+
+                    iOutHalfQs[iBoundary].push_back(lattice::iHalfQs[i]);
+
+                }else {
+
+                    iNotOutHalfQs[iBoundary].push_back(iHalfQs[i]);
                 }
             }
-         }
+        }
 
 
 
