@@ -57,6 +57,7 @@ typedef SArray<double,lattice::nQ> doubleNQ;
 
 typedef SArray<int,lattice::nD> intND;
 typedef SArray<int,lattice::nQ> intNQ;
+typedef SArray<SArray<int,nD>,nD> intNDxND;
 
 typedef SArray<bool,lattice::nQ> boolNQ;
 typedef SArray<bool,lattice::nD> boolND;
