@@ -16,6 +16,12 @@ class Message{
     // Boundary receive buffer, exactly the same length as send buffer.
     SArrayBase<std::vector<doubleNQ>,lattice::nQ> boundaryRecvBuffer;
 
+    // Index of halfQs which go out of the Qth boundary
+    SArrayBase<std::vector<doubleNQ>,lattice::nQ> iOutHalfQs;
+
+    // Index of halfQs which don't go out (tangent or in-ward) of the Qth boundary
+    SArrayBase<std::vector<doubleNQ>,lattice::nQ> iNotOutHalfQs;
+
     // Limits of loops for send buffer (ignoring ghosts and non-interacting neighbors)
     LoopLimitNQ sendLimit;
 
@@ -54,6 +60,23 @@ public:
                 boundaryRecvBuffer[iQ].push_back(f) ;
             }
         }
+
+         for (int iBoundary=1;iBoundary<lattice::nQ;iBoundary++){
+            for (int i=0;i<lattice::nQ/2;i++){
+                if (lattice::Qvector[lattice::iHlafQs[i]].dot(lattice::Qvector[iboundary])> 0) {
+
+                    iOutHalfQs[iBoundary].push_back(lattice::iHlafQs[i])
+
+                }else if {
+
+                    iNotOutHalfQs[iBoundary].push_back(lattice::iHlafQs[i])
+                }
+            }
+         }
+
+
+
+
     }
 
     // Gives the neighbor block (or MPI process) in the lattice direction of iQ.
