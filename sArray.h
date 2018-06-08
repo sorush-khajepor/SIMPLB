@@ -223,7 +223,7 @@ public:
                 return v;
         }
 
-        virtual const T dot(const SArray& arr){
+        virtual const T dot (const SArray& arr)const{
             return (*this * arr).sum();
         }
 /*
