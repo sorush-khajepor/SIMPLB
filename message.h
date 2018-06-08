@@ -33,6 +33,10 @@ public:
 
     LoopLimitNQ getSendLimit() {return sendLimit;}
     LoopLimitNQ getRecvLimit() {return recvLimit;}
+
+    SArrayBase<std::vector<doubleNQ>,lattice::nQ> getINotOutHalfQs() const{return iNotOutHalfQs;}
+    SArrayBase<std::vector<doubleNQ>,lattice::nQ> getIOutHalfQs() const{return iOutHalfQs;}
+
     // Construction
     Message(LoopLimitNQ& blockBoundaryLimit,LoopLimitNQ& blockGhostLimit, const intNQ& neighbor_){
 
@@ -79,6 +83,7 @@ public:
                 }
             }
         }
+
 
 
 
