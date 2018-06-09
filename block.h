@@ -33,11 +33,21 @@ protected:
     // Communication with neighboring blocks
     Message *message;
 
-    // Limits of loops for covering block boundaries (ignoring ghosts)
+    // Limits of loops for covering block ghosts
+    LoopLimitNQ ghostLimit;
+
+    // Limits of loops for covering block extended boundaries
     LoopLimitNQ extendedBoundaryLimit;
 
-    // Limits of loops for covering block boundaries (including ghosts)
-    LoopLimitNQ ghostLimit;
+    // Limits of loops for covering block boundaries
+    LoopLimitNQ boundaryLimit;
+
+    // Limits of loops for covering block boundaries
+    LoopLimitNQ innerLayerLimit;
+
+    // Limits of loops for covering block boundaries
+    LoopLimit coreLimit;
+
 
 public:
 
