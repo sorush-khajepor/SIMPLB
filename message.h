@@ -38,13 +38,13 @@ public:
     SArrayBase<std::vector<int>,lattice::nQ> getIOutHalfQs() const{return iOutHalfQs;}
 
     // Construction
-    Message(LoopLimitNQ& blockBoundaryLimit,LoopLimitNQ& blockGhostLimit, const intNQ& neighbor_){
+    Message(LoopLimitNQ& blockExtendedBoundaryLimit,LoopLimitNQ& blockGhostLimit, const intNQ& neighbor_){
 
         // set neighbors
         neighbor=neighbor_;
 
         // set limits of send & receive buffer
-        sendLimit = blockBoundaryLimit;
+        sendLimit = blockExtendedBoundaryLimit;
         recvLimit = blockGhostLimit;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
             if (neighbor[iQ]==MPI_PROC_NULL){
