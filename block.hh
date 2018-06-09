@@ -18,7 +18,7 @@ Block::Block(const StructuredDecomposition& sd){
     setGhostLimit();
     shrink(ghostLimit,boundaryLimit,1);
     shrink(ghostLimit,innerLayerLimit,2);
-    coreLimit.set(ghostLimit.getBegin()+3,ghostLimit.getEnd()-3);
+    coreLimit.set(ghostLimit[0].getBegin()+3,ghostLimit[0].getEnd()-3);
 
     // Set message
     message = new Message (extendedBoundaryLimit,ghostLimit,BlockNeighborIndex);
