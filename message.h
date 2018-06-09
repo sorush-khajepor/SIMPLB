@@ -20,6 +20,9 @@ class Message{
     // Index of halfQs which go out of the Qth boundary
     SArrayBase<std::vector<int>,lattice::nQ> iOutHalfQs;
 
+    // Index of halfQs which go out of the Qth boundary
+    SArrayBase<std::vector<int>,lattice::nQ> iInHalfQs;
+
     // Index of halfQs which don't go out (tangent or in-ward) of the Qth boundary
     SArrayBase<std::vector<int>,lattice::nQ> iNotOutHalfQs;
 
@@ -36,6 +39,7 @@ public:
 
     SArrayBase<std::vector<int>,lattice::nQ> getINotOutHalfQs() const{return iNotOutHalfQs;}
     SArrayBase<std::vector<int>,lattice::nQ> getIOutHalfQs() const{return iOutHalfQs;}
+    SArrayBase<std::vector<int>,lattice::nQ> getIInHalfQs() const{return iInHalfQs;}
 
     // Construction
     Message(LoopLimitNQ& blockExtendedBoundaryLimit,LoopLimitNQ& blockGhostLimit, const intNQ& neighbor_){
@@ -80,14 +84,18 @@ public:
                 }else {
 
                     iNotOutHalfQs[iBoundary].push_back(iHalfQs[i]);
+
+                    if ( (Qvector[iHalfQs[i]].dot(Xb)== 0 and Qvector[iHalfQs[i]].dot(Yb)< 0) or
+                         (Qvector[iHalfQs[i]].dot(Yb)== 0 and Qvector[iHalfQs[i]].dot(Xb)< 0) or
+                         (Qvector[iHalfQs[i]].dot(Yb)== 0 and Qvector[iHalfQs[i]].dot(Xb)== 0)) {
+                    }else{
+
+                        iInHalfQs[iBoundary].push_back(lattice::iHalfQs[i]);
+
+                    }
                 }
             }
         }
-
-
-
-
-
     }
 
     // Gives the neighbor block (or MPI process) in the lattice direction of iQ.
