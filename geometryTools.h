@@ -59,6 +59,11 @@ class LoopLimit {
 
     LoopLimit(const intND& begin_, const intND& end_): begin(begin_),end(end_){};
 
+    void set(const intND& begin_, const intND& end_){
+        begin = begin_;
+        end   = end_;
+    }
+
     LoopLimit& operator=(const LoopLimit& rhs){
             begin=rhs.begin;
             end=rhs.end;
@@ -92,6 +97,26 @@ class LoopLimit {
 	            return os;
 	        }
 };
+
+typedef SArrayBase<LoopLimit,lattice::nQ> LoopLimitNQ;
+
+void shrink(LoopLimitNQ& reference,LoopLimitNQ& shrunk, int level=1){
+    for (int iQ=0;iQ<lattice::nQ;iQ++){
+        for (int iD=0;iD<lattice::nD;iD++){
+            intND begin,end;
+            if (lattice::Qvector[iQ][iD] != 0 ){
+                begin[iD] = reference[iQ].getBegin(iD)-level*lattice::Qvector[iQ][iD];
+                end  [iD] = reference[iQ].getEnd  (iD)-level*lattice::Qvector[iQ][iD];
+            }else{
+
+                begin[iD] = reference[iQ].getBegin(iD)+level;
+                end  [iD] = reference[iQ].getEnd  (iD)-level;
+            }
+            shrunk[iQ].set(begin,end);
+        }
+    }
+};
+
 
 // Get dot product of two vectors (i.e. a.b = a1b1 + a2b2 + ... + anbn)
 // Dot product of two integers = integer
