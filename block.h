@@ -4,6 +4,8 @@
 #include"node.h"
 #include"geometryTools.h"
 #include "domainDecomposition.h"
+#include <vector>
+
 
 typedef SArrayBase<LoopLimit,lattice::nQ> LoopLimitNQ;
 
@@ -110,6 +112,54 @@ public:
                     std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
                 }
             }
+        }
+    }
+
+    void revStream(const LoopLimit& ll){
+
+        for (int iX=ll.getBegin()[0];iX<ll.getEnd()[0];++iX){
+            for (int iY=ll.getBegin()[1];iY<ll.getEnd()[1];++iY){
+                int id = getShortIndex(iX,iY);
+                for (int i=0;i<lattice::nQ/2;++i){
+
+                    int iQ = lattice::iHalfQs[i];
+                    int iX_neighbor,iY_neighbor;
+                    getPeriodicNeighbor(iX,iY,iQ,iX_neighbor,iY_neighbor);
+                    int id_neighbor = getShortIndex(iX_neighbor,iY_neighbor);
+                    std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
+                }
+            }
+        }
+    }
+
+    void revStream(const LoopLimit& ll, vector<int> iQlist){
+
+            for (int iX=ll.getBegin()[0];iX<ll.getEnd()[0];++iX){
+                for (int iY=ll.getBegin()[1];iY<ll.getEnd()[1];++iY){
+                    int id = getShortIndex(iX,iY);
+                    for (auto i=iQlist.begin();i!=iQlist.end();i++){
+
+                        int iQ = *i;
+                        int iX_neighbor,iY_neighbor;
+                        getPeriodicNeighbor(iX,iY,iQ,iX_neighbor,iY_neighbor);
+                        int id_neighbor = getShortIndex(iX_neighbor,iY_neighbor);
+                        std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
+                    }
+                }
+            }
+        }
+    //Reverse stream for boundaries (start from iQ=1).
+    void revStream(const LoopLimitNQ& ll){
+
+        for (int iQ=1;iQ<lattice::nQ;iQ++){
+            revStream(ll[iQ]);
+        }
+    }
+
+    void revStream(const LoopLimitNQ& ll, const SArrayBase<std::vector<int>,lattice::nQ> iQlist){
+
+        for (int iQ=1;iQ<lattice::nQ;iQ++){
+            revStream(ll[iQ], iQlist[iQ]);
         }
     }
 
