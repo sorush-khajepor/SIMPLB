@@ -12,10 +12,16 @@ int main(int argc, char const *argv[]) {
 // Uncomment cout one by one
 //    cout<<"~~~~~~~~~~~~~~Block specs for rank = "<<mpiTools.getRank()<<"~~~~~~~~~~~"<<endl<<block;
 
- if (mpiTools.getRank()==0) std::cout << "extendedBoundaryLimit = " << block.getExtendedBoundaryLimit()<<'\n';
+// if (mpiTools.getRank()==0) std::cout << "extendedBoundaryLimit = " << block.getExtendedBoundaryLimit()<<'\n';
 
 //if (mpiTools.getRank()==0) std::cout << "ghostLimit = " << block.getGhostLimit()<<'\n';
 
+
+//    if (mpiTools.getRank()==0) std::cout << "BoundaryLimit = " << block.getBoundaryLimit()<<'\n';
+
+ //   if (mpiTools.getRank()==0) std::cout << "innerLayerLimit = " << block.getInnerLayerLimit()<<'\n';
+
+   if (mpiTools.getRank()==0) std::cout << "coreLimit = " << block.getCoreLimit()<<'\n';
 
 //if (mpiTools.getRank()==0) std::cout << "sendLimit = " << block.getMessage().getSendLimit()<<'\n';
 

@@ -101,9 +101,10 @@ class LoopLimit {
 typedef SArrayBase<LoopLimit,lattice::nQ> LoopLimitNQ;
 
 void shrink(LoopLimitNQ& reference,LoopLimitNQ& shrunk, int level=1){
+
     for (int iQ=0;iQ<lattice::nQ;iQ++){
+        intND begin,end;
         for (int iD=0;iD<lattice::nD;iD++){
-            intND begin,end;
             if (lattice::Qvector[iQ][iD] != 0 ){
                 begin[iD] = reference[iQ].getBegin(iD)-level*lattice::Qvector[iQ][iD];
                 end  [iD] = reference[iQ].getEnd  (iD)-level*lattice::Qvector[iQ][iD];

@@ -62,4 +62,5 @@ typedef SArray<SArray<int,lattice::nD>,lattice::nD> intNDxND;
 typedef SArray<bool,lattice::nQ> boolNQ;
 typedef SArray<bool,lattice::nD> boolND;
 
+
 #endif
