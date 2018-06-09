@@ -34,7 +34,7 @@ protected:
     Message *message;
 
     // Limits of loops for covering block boundaries (ignoring ghosts)
-    LoopLimitNQ boundaryLimit;
+    LoopLimitNQ extendedBoundaryLimit;
 
     // Limits of loops for covering block boundaries (including ghosts)
     LoopLimitNQ ghostLimit;
@@ -48,7 +48,7 @@ public:
     Message& getMessage(){return *message;}
 
     // Give access to boundary&Ghost Limit members
-    LoopLimitNQ& getBoundaryLimit(){return boundaryLimit;}
+    LoopLimitNQ& getExtendedBoundaryLimit(){return extendedBoundaryLimit;}
     LoopLimitNQ& getGhostLimit(){return ghostLimit;}
 
     // Operator () is reserved for accessing nodes
@@ -81,8 +81,8 @@ public:
         cout<< "DimY = " << getDim(1)<<endl;
         cout<< "Volume  = " << vol<<endl;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
-            cout<<"iQ="<<iQ<<"boundaryLimit iXbegin="<<boundaryLimit[iQ].getBegin(0)<<" iXend="<<boundaryLimit[iQ].getEnd(0)
-                <<"  iYbegin="<<boundaryLimit[iQ].getBegin(1)<<" iYend="<<boundaryLimit[iQ].getEnd(1)<<endl;
+            cout<<"iQ="<<iQ<<"extendedBoundaryLimit iXbegin="<<extendedBoundaryLimit[iQ].getBegin(0)<<" iXend="<<extendedBoundaryLimit[iQ].getEnd(0)
+                <<"  iYbegin="<<extendedBoundaryLimit[iQ].getBegin(1)<<" iYend="<<extendedBoundaryLimit[iQ].getEnd(1)<<endl;
         }
         for (int iQ=0;iQ<lattice::nQ;++iQ){
             cout<<"iQ="<<iQ<<"ghostLimit iXbegin="<<ghostLimit[iQ].getBegin(0)<<" iXend="<<ghostLimit[iQ].getEnd(0)
@@ -190,7 +190,7 @@ public:
     // for edges and corners in D2Q9 lattice.
     // Note, Ghost nodes are excluded.
     // Note, block boundaries are identified by iQ.
-    void setBoundaryLimit(){
+    void setExtendedBoundaryLimit(){
 
         int iXend,iYend,iXbegin,iYbegin;
         for (int iQ=0;iQ<lattice::nQ;++iQ){
@@ -216,7 +216,7 @@ public:
                 iYend=2;
             }
 
-            boundaryLimit[iQ]={{iXbegin,iYbegin},{iXend,iYend}};
+            extendedBoundaryLimit[iQ]={{iXbegin,iYbegin},{iXend,iYend}};
         }
     }
 
@@ -259,7 +259,7 @@ public:
         os<<"Origin = "<<block.origin;
         os<<"Dimensions = "<<block.dim;
         os<<"Volume = "<<block.vol<<endl;
-    //    os<<"boundaryLimit = "<<block.boundaryLimit;
+    //    os<<"extendedBoundaryLimit = "<<block.extendedBoundaryLimit;
 //        os<<"ghostLimit = "<< block.ghostLimit;
         os<<std::endl<<std::endl;
         return os;

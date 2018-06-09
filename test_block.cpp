@@ -12,7 +12,7 @@ int main(int argc, char const *argv[]) {
 // Uncomment cout one by one
 //    cout<<"~~~~~~~~~~~~~~Block specs for rank = "<<mpiTools.getRank()<<"~~~~~~~~~~~"<<endl<<block;
 
-// if (mpiTools.getRank()==0) std::cout << "boundaryLimit = " << block.getBoundaryLimit()<<'\n';
+ if (mpiTools.getRank()==0) std::cout << "extendedBoundaryLimit = " << block.getExtendedBoundaryLimit()<<'\n';
 
 //if (mpiTools.getRank()==0) std::cout << "ghostLimit = " << block.getGhostLimit()<<'\n';
 
@@ -23,7 +23,7 @@ int main(int argc, char const *argv[]) {
 //if (mpiTools.getRank()==4) std::cout << "recvLimit = " << block.getMessage().getRecvLimit()<<'\n';
 
 //    cout<<"~~~~~~~~~~~~~~Block Neighbors for rank = "<<mpiTools.getRank()<<"~~~~~~~~~~~"<<endl<<block.getMessage().getNeighbor();
-
+/*
 if (mpiTools.getRank()==0){
     for (int iQ=0;iQ<lattice::nQ;iQ++){
         vector<int> v1 = block.getMessage().getIOutHalfQs()[iQ];
@@ -37,6 +37,7 @@ if (mpiTools.getRank()==0){
         }
     }
 }
+*/
     MPI_Finalize();
     return 0;
 };

@@ -87,8 +87,8 @@ class LoopLimit {
             	return computeDim().computeVol();
 	}
 	friend std::ostream& operator<<(std::ostream& os, const LoopLimit& loopLimit){
-	            std::cout<<"origin = "<<loopLimit.begin;
-	            std::cout<<"dimension ="<<loopLimit.end;
+	            std::cout<<"begin = "<<loopLimit.begin;
+	            std::cout<<"end-1 ="<<loopLimit.end-1;
 	            return os;
 	        }
 };

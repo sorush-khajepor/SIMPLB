@@ -14,9 +14,9 @@ Block::Block(const StructuredDecomposition& sd){
     nodes = new Node[vol];
 
     // Set loop limits for actual and ghost  boundaries
-    setBoundaryLimit();
+    setExtendedBoundaryLimit();
     setGhostLimit();
 
     // Set message
-    message = new Message (boundaryLimit,ghostLimit,BlockNeighborIndex);
+    message = new Message (extendedBoundaryLimit,ghostLimit,BlockNeighborIndex);
 }
