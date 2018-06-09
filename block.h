@@ -59,6 +59,9 @@ public:
     // Give access to boundary&Ghost Limit members
     LoopLimitNQ& getExtendedBoundaryLimit(){return extendedBoundaryLimit;}
     LoopLimitNQ& getGhostLimit(){return ghostLimit;}
+    LoopLimitNQ& getBoundaryLimit(){return boundaryLimit;}
+    LoopLimitNQ& getInnerLayerLimit(){return innerLayerLimit;}
+    LoopLimit&   getCoreLimit(){return coreLimit;}
 
     // Operator () is reserved for accessing nodes
     Node& operator() (const int& iX, const int& iY){
