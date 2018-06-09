@@ -97,12 +97,10 @@ public:
     // Stream in reversed direction over the whole block. The mirror() function, after this can
     // correct them.
     void revStream(){
-
         for (int iX=0;iX<dim[0];++iX){
             for (int iY=0;iY<dim[1];++iY){
                 int id = getShortIndex(iX,iY);
                 for (int i=0;i<lattice::nQ/2;++i){
-
                     int iQ = lattice::iHalfQs[i];
                     int iX_neighbor,iY_neighbor;
                     getPeriodicNeighbor(iX,iY,iQ,iX_neighbor,iY_neighbor);
@@ -114,14 +112,13 @@ public:
     }
 
     void revStream(const LoopLimit& ll){
-
         for (int iX=ll.getBegin()[0];iX<ll.getEnd()[0];++iX){
             for (int iY=ll.getBegin()[1];iY<ll.getEnd()[1];++iY){
                 int id = getShortIndex(iX,iY);
                 for (int i=0;i<lattice::nQ/2;++i){
 
                     int iQ = lattice::iHalfQs[i];
-                    int id_neighbor = getShortIndex(iX + lattice::Qvector[iQ][0],iY + lattice::Qvector[iQ][1]);
+                    int id_neighbor = getShortIndex(iX+lattice::Qvector[iQ][0], iY+lattice::Qvector[iQ][1]);
                     std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
                 }
             }
@@ -129,7 +126,6 @@ public:
     }
 
     void revStream(const LoopLimit& ll, vector<int> iQlist){
-
             for (int iX=ll.getBegin()[0];iX<ll.getEnd()[0];++iX){
                 for (int iY=ll.getBegin()[1];iY<ll.getEnd()[1];++iY){
                     int id = getShortIndex(iX,iY);
@@ -142,14 +138,14 @@ public:
             }
         }
 
-    //Reverse stream for boundaries (start from iQ=1).
+    //Reverse stream for boundary layers (start from iQ=1).
     void revStream(const LoopLimitNQ& ll){
-
         for (int iQ=1;iQ<lattice::nQ;iQ++){
             revStream(ll[iQ]);
         }
     }
 
+    // Reverse stream for layers with specific Q directions
     void revStream(const LoopLimitNQ& ll, const SArrayBase<std::vector<int>,lattice::nQ> iQlist){
 
         for (int iQ=1;iQ<lattice::nQ;iQ++){
