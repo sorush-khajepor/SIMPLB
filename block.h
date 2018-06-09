@@ -7,7 +7,6 @@
 #include <vector>
 
 
-typedef SArrayBase<LoopLimit,lattice::nQ> LoopLimitNQ;
 
 class Message;
 
@@ -85,20 +84,6 @@ public:
     const int& getOrigin(const int& iD) const {return origin[iD];}
     const int& getVol() const {return vol;}
 
-    // Prints class members
-    void print() {
-        cout<< "DimX = " << getDim(0)<<endl;
-        cout<< "DimY = " << getDim(1)<<endl;
-        cout<< "Volume  = " << vol<<endl;
-        for (int iQ=0;iQ<lattice::nQ;++iQ){
-            cout<<"iQ="<<iQ<<"extendedBoundaryLimit iXbegin="<<extendedBoundaryLimit[iQ].getBegin(0)<<" iXend="<<extendedBoundaryLimit[iQ].getEnd(0)
-                <<"  iYbegin="<<extendedBoundaryLimit[iQ].getBegin(1)<<" iYend="<<extendedBoundaryLimit[iQ].getEnd(1)<<endl;
-        }
-        for (int iQ=0;iQ<lattice::nQ;++iQ){
-            cout<<"iQ="<<iQ<<"ghostLimit iXbegin="<<ghostLimit[iQ].getBegin(0)<<" iXend="<<ghostLimit[iQ].getEnd(0)
-                <<"  iYbegin="<<ghostLimit[iQ].getBegin(1)<<" iYend="<<ghostLimit[iQ].getEnd(1)<<endl;
-        }
-    }
 
     // Finds the neighbor of the node (iX,iY) in the direction of iQ for a periodic block.
     void getPeriodicNeighbor (const int& iX, const int& iY, const int& iQ, int& iX_neighbor, int& iY_neighbor) {
