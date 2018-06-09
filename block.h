@@ -121,9 +121,7 @@ public:
                 for (int i=0;i<lattice::nQ/2;++i){
 
                     int iQ = lattice::iHalfQs[i];
-                    int iX_neighbor,iY_neighbor;
-                    getPeriodicNeighbor(iX,iY,iQ,iX_neighbor,iY_neighbor);
-                    int id_neighbor = getShortIndex(iX_neighbor,iY_neighbor);
+                    int id_neighbor = getShortIndex(iX + lattice::Qvector[iQ][0],iY + lattice::Qvector[iQ][1]);
                     std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
                 }
             }
@@ -137,15 +135,13 @@ public:
                     int id = getShortIndex(iX,iY);
                     for (auto i=iQlist.begin();i!=iQlist.end();i++){
 
-                        int iQ = *i;
-                        int iX_neighbor,iY_neighbor;
-                        getPeriodicNeighbor(iX,iY,iQ,iX_neighbor,iY_neighbor);
-                        int id_neighbor = getShortIndex(iX_neighbor,iY_neighbor);
-                        std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
+                        int id_neighbor = getShortIndex(iX + lattice::Qvector[*i][0],iY + lattice::Qvector[*i][1]);
+                        std::swap(nodes[id][*i],nodes[id_neighbor][lattice::iOpposite[*i]]);
                     }
                 }
             }
         }
+
     //Reverse stream for boundaries (start from iQ=1).
     void revStream(const LoopLimitNQ& ll){
 
