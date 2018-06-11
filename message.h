@@ -84,14 +84,14 @@ public:
                 }else {
 
                     iNotOutHalfQs[iBoundary].push_back(iHalfQs[i]);
-
+// TODO iInHalfQs is not set properly! Fix it.
                     if ( (Qvector[iHalfQs[i]].dot(Xb)== 0 and Qvector[iHalfQs[i]].dot(Yb)< 0) or
                          (Qvector[iHalfQs[i]].dot(Yb)== 0 and Qvector[iHalfQs[i]].dot(Xb)< 0) or
                          (Qvector[iHalfQs[i]].dot(Yb)== 0 and Qvector[iHalfQs[i]].dot(Xb)== 0)) {
                     }else{
 
                         iInHalfQs[iBoundary].push_back(lattice::iHalfQs[i]);
-
+//----------------
                     }
                 }
             }
