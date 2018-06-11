@@ -116,7 +116,6 @@ public:
             for (int iY=ll.getBegin()[1];iY<ll.getEnd()[1];++iY){
                 int id = getShortIndex(iX,iY);
                 for (int i=0;i<lattice::nQ/2;++i){
-
                     int iQ = lattice::iHalfQs[i];
                     int id_neighbor = getShortIndex(iX+lattice::Qvector[iQ][0], iY+lattice::Qvector[iQ][1]);
                     std::swap(nodes[id][iQ],nodes[id_neighbor][lattice::iOpposite[iQ]]);
@@ -130,7 +129,6 @@ public:
                 for (int iY=ll.getBegin()[1];iY<ll.getEnd()[1];++iY){
                     int id = getShortIndex(iX,iY);
                     for (auto i=iQlist.begin();i!=iQlist.end();i++){
-
                         int id_neighbor = getShortIndex(iX + lattice::Qvector[*i][0],iY + lattice::Qvector[*i][1]);
                         std::swap(nodes[id][*i],nodes[id_neighbor][lattice::iOpposite[*i]]);
                     }
