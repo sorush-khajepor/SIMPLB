@@ -11,9 +11,9 @@ class DomainDecomposition{
 class StructuredDecomposition :public DomainDecomposition {
 
     protected:
-    // Origin is placed on (1,1[,1])
-    const intND origin=1;
-    // Raw whole domain dimensions (before considering ghosts)
+    // Origin is placed on (2,2[,2])
+    const intND origin=2;
+    // Raw whole domain dimensions/number of nodes along (X-Y-z) before considering ghosts
     intND dim;
     // Number of Blocks in the whole domain along each (X-Y-Z) direction
     intND nBlock;
@@ -40,6 +40,7 @@ class StructuredDecomposition :public DomainDecomposition {
     const intND& getNBlock() const{
         return nBlock;
     }
+
     const int& getDim(const int& iD) const{
             return dim[iD];
         }
@@ -54,16 +55,17 @@ class StructuredDecomposition :public DomainDecomposition {
 
         for (int iD=0;iD<lattice::nD;++iD){
             int remainder = dim[iD]%nBlock[iD];
-            // Dimension of the block along XYZ axes including 2 ghost layers
-            blockDim[iD]= (dim[iD]+nBlock[iD]-blockCartIndex[iD] -1)/nBlock[iD]+2;
-            // Origin of the block starts from the ghost layer.
-            blockOrigin[iD] = dim[iD]/nBlock[iD]*blockCartIndex[iD]+std::min(blockCartIndex[iD],remainder)-1 + origin[iD];
+            // Dimension of the block along XYZ axes including 4 ghost layers
+            blockDim[iD]= (dim[iD]+nBlock[iD]-blockCartIndex[iD] -1)/nBlock[iD]+4;
+            // Origin of the block starts from the outer ghost layer.
+            blockOrigin[iD] = dim[iD]/nBlock[iD]*blockCartIndex[iD]+std::min(blockCartIndex[iD],remainder)-2 + origin[iD];
         }
 
 
         BlockNeighborIndex=computeNeighborIndex();
 
     }
+
     // Finding block neighbors
     intNQ computeNeighborIndex() const {
         intNQ iNei;
